@@ -228,15 +228,9 @@ router.post("/event/:eventId/createCertificate", requiresAuth(), async (req, res
   const issuerDetails = await Org.findOne({email});
   console.log(issuerDetails)
 
-  const assetData = JSON.stringify({
-    issuerEmail: email,
-    issuedToEmail,
-    eventId,
-    participantName: issueToName,
-    prize,
-    dateTime,
-  });
-
+  const eventDetails = await Event.findOne({eventId});
+  const assetData = `${issuerDetails.name} ${issueToName} ${prize} ${eventDetails.eventName}`;
+  console.log(assetData);
 
 
   const issuingKeyPair = DiamSdk.Keypair.fromSecret(issuerDetails.privateKey);
@@ -297,7 +291,7 @@ router.post("/event/:eventId/createCertificate", requiresAuth(), async (req, res
             amount: "10",
           })
         )
-        .addMemo(DiamSdk.Memo.text(`${encryptedCert}`))
+        .addMemo(DiamSdk.Memo.text(`${assetData}`))
         .setTimeout(100) // setTimeout is required for transactions
         .build();
   
@@ -356,8 +350,9 @@ router.get("/verify/:verificationId", async (req, res)=> {
   .transaction(verificationId)
   .call();
 
+
   console.log("Asset details retrieved:", transactionDetails);
-  res.status(200).json({success:true, msg:transactionDetails});
+  res.status(200).json({success:true, cert:transactionDetails.memo});
 } catch (e) {
   console.log(e)
   res.status(500).json({error:true, msg:e.message})
