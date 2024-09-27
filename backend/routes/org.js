@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const { auth } = require('express-openid-connect');
 const cloudinary = require('cloudinary').v2;
+const { requiresAuth } = require('express-openid-connect');
 const dotenv = require('dotenv');
+const auth0ConfigOrg = require('../auth0ConfigOrg');
 
 //config integration
 dotenv.config();
+
 
 // Multer storage configuration
 const storage = multer.memoryStorage(); // Store files in memory
@@ -17,12 +21,13 @@ cloudinary.config({
   api_secret: '9cHuX1EL1aPTlSR7R9W8kTskB5M'
 });
 
-// Route for handling organization requests
-router.get('/', (req, res) => {
-  res.send('Organization home');
+router.use(auth(auth0ConfigOrg));
+router.get('/', requiresAuth(), (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 
-router.post('/editInfo', async (req, res)=> {
+
+router.post('/editInfo',auth(auth0ConfigOrg), async (req, res)=> {
   const file = req.file;
 
   if(file){
