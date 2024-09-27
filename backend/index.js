@@ -1,12 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
-
 //db connection import
 const connectToDatabase = require('./db');
 
 //routes import
 const orgRouter = require('./routes/org');
 const participantRouter = require('./routes/participant');
+
 
 //config integration
 dotenv.config();
@@ -23,7 +23,7 @@ app.use('/participant', participantRouter);
 
 
 app.get('/', (req, res) => {
-  res.send('Certificate Backend is running');
+  res.send("hello");
 });
 
 
