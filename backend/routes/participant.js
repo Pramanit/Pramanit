@@ -9,7 +9,7 @@ const auth0ConfigParticipant = require('../auth0ConfigParticipant');
 router.use(auth(auth0ConfigParticipant));
 // Route for handling participant requests
 router.get('/', requiresAuth(), (req, res) => {
-  res.send('Participant home');
+  res.send(req.oidc.user);
 });
 
 // Example: Register a new participant
