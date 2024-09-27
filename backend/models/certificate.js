@@ -39,8 +39,6 @@ const certificateSchema = new mongoose.Schema({
   },
   verificationId: {
     type: String,
-    default: uuidv4, // Unique verification ID for each certificate
-    unique: true
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields
