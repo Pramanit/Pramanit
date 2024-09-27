@@ -6,24 +6,24 @@ import clsx from "clsx";
 import {motion , AnimatePresence} from 'framer-motion';
 const items = [
   {
-    question: "What payment methods do you accept?",
+    question: "How is my personal information protected?",
     answer:
-      "We accept all major credit cards, PayPal, and various other payment methods depending on your location. Please contact our support team for more information on accepted payment methods in your region.",
+      "We prioritize your security by using industry-standard encryption protocols for data storage and transmission. Our blockchain-based system ensures that your data is immutable and tamper-proof. Additionally, we comply with data protection regulations to safeguard your privacy.",
   },
   {
-    question: "How does the pricing work for teams?",
+    question: "How can I verify the authenticity of my certificate?",
     answer:
-      "Our pricing is per user, per month. This means you only pay for the number of team members you have on your account. Discounts are available for larger teams and annual subscriptions.",
+      "Each certificate issued is stored on the blockchain, providing a permanent and unalterable record. You can verify the authenticity of your certificate by checking it against our blockchain ledger, ensuring it is genuine and has not been altered.",
   },
   {
-    question: "Can I change my plan later?",
+    question: "Is the interface user-friendly for both organizations and participants?",
     answer:
-      "Yes, you can upgrade or downgrade your plan at any time. Changes to your plan will be prorated and reflected in your next billing cycle.",
+      "Yes, we have designed an intuitive interface that is easy to navigate for both organizations and participants. We also provide tutorials and support to help users make the most of our platform.",
   },
   {
-    question: "Is my data secure?",
+    question: "How secure are the payment options?",
     answer:
-      "Security is our top priority. We use state-of-the-art encryption and comply with the best industry practices to ensure that your data is stored securely and accessed only by authorized users.",
+      "Our payment processing is handled by reputable third-party services that comply with PCI DSS standards, ensuring that your payment information is securely processed. We never store sensitive payment details on our servers.",
   },
 ];
 
@@ -56,11 +56,14 @@ const AccordinationItem = ({question, answer}:{question:string, answer: string})
 
 export const FAQs = () => {
   return (
-    <div className="bg-black text-white py-[72px] sm:py-24 bg-gradient-to-b from-[#5D2CA8] to-black ">
+    <div className="bg-black text-white py-[72px] sm:py-24 bg-gradient-to-b from-[#113366] to-black ">
       <div className="container">
-        <h2 className="text-5xl sm:text-6xl sm:w-[648px] mx-auto text-center text-white tracking-tighter">
-          Frequently Asked Questions
+        <h2 className="text-center text-5xl font-bold tracking-tighter">
+          Common Queries
         </h2>
+        <div className='max-w-xl mx-auto'>
+          <p className="text-xl text-white/70 text-center mt-5">Find quick answers to the most frequently asked questions about our certification verification system.</p>
+        </div>
         <div className="mt-12 max-w-[648px] mx-auto">
          {items.map(({question, answer}) => (
             <AccordinationItem question={question} answer={answer} key={question}/>
