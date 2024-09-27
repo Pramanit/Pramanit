@@ -25,7 +25,7 @@ const eventSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true
-  }
+  },
 }, {
   timestamps: true // Automatically adds `createdAt` and `updatedAt` fields
 });
