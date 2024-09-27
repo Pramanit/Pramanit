@@ -1,4 +1,4 @@
-![Logo](https://github.com/umeshs25/Pramanit/blob/main/Utilities/Logos%20Final/pramanit%20full%20logo.png)
+![Logo](https://github.com/Pramanit/Pramanit/blob/main/Utilities/Logos%20Final/pramanit%20full%20logo%20BLACK%20TEXT.png)
 # PRAMANIT
 **Certificate verification and management app**
 
