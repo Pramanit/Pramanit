@@ -1,10 +1,15 @@
 // app/certificates/page.tsx
+"use client"
 import React from 'react';
+import {useState, useEffect} from "react";
 import Image from 'next/image';
 import profilePhoto from '@/assets/images/umesh.png'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 
+
 export default function CertificatesPage() {
+
+
   // Sample data for the table
   const certificates = [
     {

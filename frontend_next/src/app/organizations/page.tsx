@@ -1,10 +1,26 @@
 // app/certificates/page.tsx
+"use client"
 import React from 'react';
 import Image from 'next/image';
+import {useState, useEffect} from "react";
 import profilePhoto from '@/assets/images/umesh.png'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 
-export default function CertificatesPage() {
+export default async function CertificatesPage() {
+
+  useEffect(async ()=>{
+    const response = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/org`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseData = response.json();
+
+    console.log(responseData);
+
+  },[])
   // Sample data for the table
   const certificates = [
     {

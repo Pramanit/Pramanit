@@ -334,8 +334,6 @@ router.post("/event/:eventId/createCertificate", requiresAuth(), async (req, res
     console.error("Error processing request:", e);
     res.status(500).json({error:true, msg: e.message});
   }
-
-
 })
 
 router.get("/verify/:verificationId", async (req, res)=> {
