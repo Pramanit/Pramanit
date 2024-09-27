@@ -16,6 +16,7 @@ connectToDatabase();
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //initialising routes
 app.use('/org', orgRouter);
