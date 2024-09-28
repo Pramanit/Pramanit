@@ -24,7 +24,7 @@ Our solution is aimed at eliminating the challenges of counterfeit certificates,
 [Documentation](https://docs.google.com/document/d/1qOSHKXulyFJzY0WzaE0fy_WpvO6kMCvP43GDLJWKDmg/edit?usp=sharing)
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/umeshs25/Pramanit/blob/main/Utilities/Screenshots/Pramanit_HeroPage_S1.png)
 ## Usage/Examples
 
 ```javascript
