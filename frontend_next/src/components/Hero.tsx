@@ -47,7 +47,7 @@ export const Hero = () => {
       </div>
       <div className="flex justify-center mt-8">
       <button className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg">
-      Join Us Today
+      Get Premium!
       </button>
       </div>
 
