@@ -6,6 +6,13 @@ import profilePhoto from '@/assets/images/organisation.jpeg'; // Import the prof
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 import blueTick from '@/assets/images/bluetick1.png'; // Import the blue tick image
 
+// Define the Event type
+interface EventType {
+  event: string; // or whatever properties your event has
+  id: number;  // adjust as necessary
+  // Add more properties as needed
+}
+
 export default function OrganizationsPage() {
   const [isVerified] = useState(true); // Replace this with actual verification logic
   const [isFormOpen, setIsFormOpen] = useState(false); // State to handle form visibility
@@ -36,11 +43,11 @@ export default function OrganizationsPage() {
       },
   ]);
 
-  // Function to handle adding a new event
-  const handleAddEvent = (event) => {
-    setEvents([...events, { ...event, id: events.length + 1 }]);
-    setIsFormOpen(false);
-  };
+// Update the handleAddEvent function
+  const handleAddEvent = (event: any) => { 
+  setEvents([...events, { ...event, id: events.length + 1 }]);
+  setIsFormOpen(false);
+};
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
