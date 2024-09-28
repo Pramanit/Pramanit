@@ -1,7 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 //db connection import
 const connectToDatabase = require('./db');
+
+
 
 //routes import
 const orgRouter = require('./routes/org');
@@ -17,6 +20,8 @@ connectToDatabase();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 //initialising routes
 app.use('/org', orgRouter);
