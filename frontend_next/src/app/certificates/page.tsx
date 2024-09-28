@@ -1,11 +1,43 @@
 // app/certificates/page.tsx
-import React from 'react';
+"use client"
+import React, {useEffect, useState} from 'react';
 import Image from 'next/image';
 import profilePhoto from '@/assets/images/umesh.png'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 
+
+// interface OrgData {
+//   id: number;
+//   name: string;
+//   verified: boolean;
+  
+// }
+
 export default function CertificatesPage() {
-  // Sample data for the table
+  
+  // const [orgData, setOrgData] = useState<OrgData | null>(null);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   const fetchOrgData = async () => {
+  //     try {
+  //       const response = await fetch('/org');
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //       const data: OrgData = await response.json();
+  //       setOrgData(data);
+  //     } catch (error) {
+  //       setError((error as Error).message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchOrgData();
+  // }, []);
+
   const certificates = [
     {
       id: 1,
