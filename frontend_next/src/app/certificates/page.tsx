@@ -18,7 +18,7 @@ export default function CertificatesPage() {
       organisedBy: 'Tech Community',
       prize: 'First Place',
       dateTime: '2024-09-15 10:00 AM',
-      issuedTo: 'Umesh Don',
+      issuedTo: 'Umesh Sahu',
       issuedToEmail: 'johndoe@example.com',
       verificationId: 'ABC123XYZ',
     },
@@ -28,7 +28,7 @@ export default function CertificatesPage() {
       organisedBy: 'Code Masters',
       prize: 'Runner Up',
       dateTime: '2024-08-10 02:00 PM',
-      issuedTo: 'Umesh Don',
+      issuedTo: 'Umesh Sahu',
       issuedToEmail: 'janesmith@example.com',
       verificationId: 'XYZ789ABC',
     },
@@ -38,7 +38,7 @@ export default function CertificatesPage() {
         organisedBy: 'Tech Community',
         prize: 'First Place',
         dateTime: '2024-09-15 10:00 AM',
-        issuedTo: 'Umesh Don',
+        issuedTo: 'Umesh Sahu',
         issuedToEmail: 'johndoe@example.com',
         verificationId: 'ABC123XYZ',
       },
@@ -48,7 +48,7 @@ export default function CertificatesPage() {
         organisedBy: 'Code Masters',
         prize: 'Runner Up',
         dateTime: '2024-08-10 02:00 PM',
-        issuedTo: 'Umesh Don',
+        issuedTo: 'Umesh Sahu',
         issuedToEmail: 'janesmith@example.com',
         verificationId: 'XYZ789ABC',
       },
@@ -58,7 +58,7 @@ export default function CertificatesPage() {
         organisedBy: 'Tech Community',
         prize: 'First Place',
         dateTime: '2024-09-15 10:00 AM',
-        issuedTo: 'Umesh Don',
+        issuedTo: 'Umesh Sahu',
         issuedToEmail: 'johndoe@example.com',
         verificationId: 'ABC123XYZ',
       },
@@ -68,7 +68,7 @@ export default function CertificatesPage() {
         organisedBy: 'Code Masters',
         prize: 'Runner Up',
         dateTime: '2024-08-10 02:00 PM',
-        issuedTo: 'Umesh Don',
+        issuedTo: 'Umesh Sahu',
         issuedToEmail: 'janesmith@example.com',
         verificationId: 'XYZ789ABC',
       },
@@ -107,7 +107,7 @@ export default function CertificatesPage() {
             height={128}
           />
           <div className="text-left">
-            <h2 className="text-gray-300 text-sm">User Name</h2>
+            <h2 className="text-gray-300 text-sm">Participant Name</h2>
             <span className="text-2xl font-semibold">Umesh Sahu</span>
           </div>
         </div>
