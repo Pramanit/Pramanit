@@ -1,4 +1,3 @@
-import Bentodemo from './bentogrid';
 import PricingTable, { PricingTab } from './pricing';
 
 export const Pricing = () => {
