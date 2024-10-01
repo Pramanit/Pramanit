@@ -65,7 +65,7 @@ export const Navbar = () => {
               <nav className="text-white gap-6 items-center hidden sm:flex">
                 <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">About</a>
                 <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
-                <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">Subscribe</a>
+                <a href="#pricing" className="text-opacity-60 hover:text-opacity-100 transition">Subscribe</a>
                 <button
                   className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg"
                   onClick={handleLoginClick}
@@ -105,7 +105,7 @@ const SignInPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
             className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full focus:outline-none"
             onClick={() => {
               onClose();
-              window.location.href = "/organizations";
+              window.location.href = "/organization";
             }}
           >
             Organization

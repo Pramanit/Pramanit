@@ -16,6 +16,7 @@ interface PricingTabProps {
 
 export function PricingTab(props: PricingTabProps) {
   return (
+    <div id="pricing">
     <div className={`h-full `}>
       <div className="relative flex flex-col h-full p-6 rounded-2xl bg-black border border-white/30 shadow shadow-black/80">
         {props.popular && (
@@ -49,6 +50,7 @@ export function PricingTab(props: PricingTabProps) {
           })}
         </ul>
       </div>
+    </div>
     </div>
   )
 }
