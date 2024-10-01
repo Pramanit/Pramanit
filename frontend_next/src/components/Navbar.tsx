@@ -2,45 +2,6 @@
 
 import { useState } from 'react';
 import LogoImage from '../assets/icons/logo.svg';
-import MenuIcon from '../assets/icons/menu.svg';
-
-const SignInPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-      <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-96 relative">
-        <h2 className="text-2xl font-semibold mb-4 text-center text-white">Sign in as</h2>
-        <div className="flex gap-4">
-          <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full focus:outline-none"
-            onClick={() => {
-              onClose();
-              window.location.href = "/certificates";
-            }}
-          >
-            Participant
-          </button>
-          <button
-            className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full focus:outline-none"
-            onClick={() => {
-              onClose();
-              window.location.href = "/organizations";
-            }}
-          >
-            Organization
-          </button>
-        </div>
-        <button
-          className="mt-4 px-4 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700 focus:outline-none w-full"
-          onClick={onClose}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
-};
 
 export const Navbar = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -71,28 +32,14 @@ export const Navbar = () => {
 
               {/* Mobile menu toggle button */}
               <div
-                className="border border-white border-opacity-30 h-10 w-10 inline-flex justify-center items-center rounded-lg sm:hidden"
+                className="h-10 w-10 inline-flex justify-center items-center sm:hidden cursor-pointer"
                 onClick={toggleMobileMenu}
               >
-                {isMobileMenuOpen ? (
-                  // Inline SVG for close icon
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="h-6 w-6 text-white"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                ) : (
-                  <MenuIcon className="text-white" />
-                )}
+                <div className={`burger-menu relative w-8 h-6 transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'open' : ''}`}>
+                  <span className={`block absolute left-0 top-0 w-full h-0.5 bg-white transform transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
+                  <span className={`block absolute left-0 top-2.5 w-full h-0.5 bg-white transform transition-opacity duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
+                  <span className={`block absolute left-0 top-5 w-full h-0.5 bg-white transform transition-all duration-500 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`} />
+                </div>
               </div>
 
               {/* Mobile Menu */}
@@ -134,5 +81,43 @@ export const Navbar = () => {
       {/* Popup component */}
       <SignInPopup isOpen={isPopupOpen} onClose={handleClosePopup} />
     </>
+  );
+};
+
+const SignInPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+      <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-96 relative">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-white">Sign in as</h2>
+        <div className="flex gap-4">
+          <button
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full focus:outline-none"
+            onClick={() => {
+              onClose();
+              window.location.href = "/certificates";
+            }}
+          >
+            Participant
+          </button>
+          <button
+            className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full focus:outline-none"
+            onClick={() => {
+              onClose();
+              window.location.href = "/organizations";
+            }}
+          >
+            Organization
+          </button>
+        </div>
+        <button
+          className="mt-4 px-4 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700 focus:outline-none w-full"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      </div>
+    </div>
   );
 };
