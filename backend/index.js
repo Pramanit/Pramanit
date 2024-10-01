@@ -1,7 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
+const { auth } = require('express-openid-connect');
+const auth0Config = require('./auth0Config');
 //db connection import
 const connectToDatabase = require('./db');
+
+
 
 //routes import
 const orgRouter = require('./routes/org');
@@ -17,6 +22,9 @@ connectToDatabase();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
+app.use(auth(auth0Config))
 
 //initialising routes
 app.use('/org', orgRouter);

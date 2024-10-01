@@ -26,12 +26,12 @@ export function PricingTab(props: PricingTabProps) {
         <div className="mb-5">
           <div className="text-white/70 font-semibold mb-1">{props.planName}</div>
           <div className="inline-flex items-baseline mb-2">
-            <span className="text-white/70 font-bold text-3xl">$</span>
+            <span className="text-white/70 font-bold text-3xl">₹</span>
             <span className="text-white/50 font-bold text-4xl">{props.yearly ? props.price.yearly : props.price.monthly}</span>
             <span className="text-white/70 font-medium">/mo</span>
           </div>
           <div className="text-sm text-white/70 mb-5">{props.planDescription}</div>
-          <a className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-[#5D2CA8] px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-[#5D2CA2] focus-visible:outline-none focus-visible:ring focus-visible:ring-slate-600 transition-colors duration-150" href="#0">
+          <a className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-[#2C38A8] px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-[#2C36A3] focus-visible:outline-none focus-visible:ring focus-visible:ring-slate-600 transition-colors duration-150" href="#0">
             Purchase Plan
           </a>
         </div>
@@ -63,7 +63,7 @@ export default function PricingTable() {
       <div className="flex justify-center max-w-[14rem] m-auto mb-8 lg:mb-16">
         <div className="relative flex w-full p-1 bg-black rounded-full">
           <span className="absolute inset-0 m-1 pointer-events-none" aria-hidden="true">
-            <span className={`absolute inset-0 w-1/2 bg-[#5D2CA8] rounded-full shadow-sm shadow-[#5D2CA8] transform transition-transform duration-150 ease-in-out ${isAnnual ? 'translate-x-0' : 'translate-x-full'}`}></span>
+            <span className={`absolute inset-0 w-1/2 bg-[#2C36A3] rounded-full shadow-sm shadow-[#2C36A3] transform transition-transform duration-150 ease-in-out ${isAnnual ? 'translate-x-0' : 'translate-x-full'}`}></span>
           </span>
           <button className={`relative flex-1 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${isAnnual ? 'text-white/70' : ' text-white'}`} onClick={() => setIsAnnual(true)} aria-pressed={isAnnual}>Yearly <span className={`${isAnnual ? 'text-indigo-200' : 'text-slate-400 dark:text-slate-500'}`}>-20%</span></button>
           <button className={`relative flex-1 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${isAnnual ? 'text-white/70' : ' text-white'}`} onClick={() => setIsAnnual(false)} aria-pressed={isAnnual}>Monthly</button>
@@ -76,13 +76,12 @@ export default function PricingTable() {
         <PricingTab
           yearly={isAnnual}
           planName="Essential"
-          price={{ yearly: 29, monthly: 35 }}
-          planDescription="There are many variations available, but the majority have suffered."
+          price={{ yearly: 100, monthly: 80 }}
+          planDescription="Individuals or small organizations looking for basic verification services."
           features={[
-            'Unlimited placeholder texts',
-            'Consectetur adipiscing elit',
-            'Excepteur sint occaecat cupidatat',
-            'Officia deserunt mollit anim',
+            'Basic certificate verification (up to a certain number of verifications per month)',
+            'Email support',
+            'Basic customization options',
           ]} />
 
         {/* Pricing tab 2 */}
@@ -90,29 +89,28 @@ export default function PricingTable() {
           yearly={isAnnual}
           popular={true}
           planName="Perform"
-          price={{ yearly: 49, monthly: 55 }}
-          planDescription="There are many variations available, but the majority have suffered."
+          price={{ yearly: 200, monthly: 160 }}
+          planDescription="Medium-sized organizations that require more advanced features and greater usage."
           features={[
-            'Unlimited placeholder texts',
-            'Consectetur adipiscing elit',
-            'Excepteur sint occaecat cupidatat',
-            'Officia deserunt mollit anim',
-            'Predefined chunks as necessary',
+            'Everything in the Essential Plan',
+            'Increased verification limit per month',
+            'Priority email support',
+            'Advanced analytics and reporting',
+            'Multi-user access',
           ]} />
 
         {/* Pricing tab 3 */}
         <PricingTab
           yearly={isAnnual}
           planName="Enterprise"
-          price={{ yearly: 79, monthly: 85 }}
-          planDescription="There are many variations available, but the majority have suffered."
+          price={{ yearly: 300, monthly: 240 }}
+          planDescription="Large organizations or institutions that require extensive features and support."
           features={[
-            'Unlimited placeholder texts',
-            'Consectetur adipiscing elit',
-            'Excepteur sint occaecat cupidatat',
-            'Officia deserunt mollit anim',
-            'Predefined chunks as necessary',
-            'Free from repetition',
+            'Everything in the Perform Plan',
+            'Unlimited certificate verifications',
+            '24/7 priority support (chat, email, phone)',
+            'Advanced security features',
+            'Custom development options',
           ]} />
 
       </div>

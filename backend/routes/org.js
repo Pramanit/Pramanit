@@ -5,7 +5,7 @@ const { auth } = require('express-openid-connect');
 const cloudinary = require('cloudinary').v2;
 const { requiresAuth } = require('express-openid-connect');
 const dotenv = require('dotenv');
-const auth0ConfigOrg = require('../auth0ConfigOrg');
+// const auth0Config = require('../auth0Config');
 const Org = require("../models/org");
 const Event = require("../models/event");
 const DiamSdk = require("diamnet-sdk");
@@ -33,7 +33,7 @@ cloudinary.config({
 });
 
 
-router.use(auth(auth0ConfigOrg));
+// router.use(auth(auth0Config));
 
 
   router.get('/', requiresAuth(), async (req, res) => {
