@@ -44,6 +44,7 @@ const SignInPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
 
 export const Navbar = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLoginClick = () => {
     setIsPopupOpen(true);
@@ -53,6 +54,10 @@ export const Navbar = () => {
     setIsPopupOpen(false);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <>
       <div className="bg-black bg-opacity-30 fixed top-0 left-0 right-0 z-40 backdrop-blur-md rounded-xl shadow-lg">
@@ -60,18 +65,60 @@ export const Navbar = () => {
           <div className="container mx-auto">
             <div className="py-4 flex items-center justify-between">
               <div className="relative">
-                <div className='absolute w-full top-4 bottom-8 bg-[linear-gradient(to_right,rgba(253,230,138,0.5),rgba(251,191,36,0.5),rgba(245,158,11,0.5))] blur-md'></div>
+                <div className="absolute w-full top-4 bottom-8 bg-[linear-gradient(to_right,rgba(253,230,138,0.5),rgba(251,191,36,0.5),rgba(245,158,11,0.5))] blur-md"></div>
                 <a href="#"><LogoImage className="h-12 w-12 relative mt-1" /></a>
               </div>
 
-              <div className='border border-white border-opacity-30 h-10 w-10 inline-flex justify-center items-center rounded-lg sm:hidden'>
-                <MenuIcon className="text-white" />
+              {/* Mobile menu toggle button */}
+              <div
+                className="border border-white border-opacity-30 h-10 w-10 inline-flex justify-center items-center rounded-lg sm:hidden"
+                onClick={toggleMobileMenu}
+              >
+                {isMobileMenuOpen ? (
+                  // Inline SVG for close icon
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="h-6 w-6 text-white"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                ) : (
+                  <MenuIcon className="text-white" />
+                )}
               </div>
 
-              <nav className='text-white gap-6 items-center hidden sm:flex'>
-                <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>About</a>
-                <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>FAQ</a>
-                <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>Subscribe</a>
+              {/* Mobile Menu */}
+              <div
+                className={`absolute top-16 left-0 right-0 bg-black bg-opacity-90 p-8 rounded-b-lg z-50 transition-all duration-300 ease-in-out ${
+                  isMobileMenuOpen ? 'block' : 'hidden'
+                } sm:hidden`}
+              >
+                <nav className="text-white flex flex-col gap-4 items-center">
+                  <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">About</a>
+                  <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
+                  <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">Subscribe</a>
+                  <button
+                    className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg"
+                    onClick={handleLoginClick}
+                  >
+                    Log In
+                  </button>
+                </nav>
+              </div>
+
+              {/* Desktop Navigation */}
+              <nav className="text-white gap-6 items-center hidden sm:flex">
+                <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">About</a>
+                <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
+                <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">Subscribe</a>
                 <button
                   className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg"
                   onClick={handleLoginClick}
@@ -83,6 +130,7 @@ export const Navbar = () => {
           </div>
         </div>
       </div>
+
       {/* Popup component */}
       <SignInPopup isOpen={isPopupOpen} onClose={handleClosePopup} />
     </>
