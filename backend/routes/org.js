@@ -323,7 +323,8 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
 
   //create certificate
     const org = await Org.findOne({email})
-
+    const event = await Event.findOne({eventId});
+    console.log(event)
     const newCertificate = new Certificate({
       issuedBy: org.name,
       issuerEmail: email,
@@ -332,7 +333,8 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
       participantName: issueToName,
       prize,
       dateTime,
-      verificationId: verificationId
+      verificationId: verificationId,
+      eventName: event.eventName
     });
     await newCertificate.save();
 
