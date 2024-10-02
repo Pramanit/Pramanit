@@ -128,7 +128,7 @@ export default function OrganizationsPage() {
               <tr
                 key={event.id}
                 className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer"
-                onClick={() => router.push(`/organization/event/${event.id}`)} // Navigate to event detail page
+                onClick={() => router.push(`/organization/event/${event.eventId}`)} // Navigate to event detail page
               >
                 <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
                 <td className="py-2 px-4 border-b text-white">{event.description}</td>
