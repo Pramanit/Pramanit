@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Image from "next/image";
+import pramanitLogo from "@/assets/images/pramanit3.png"; // Adjust path as per your structure
 
 export default function ParticipantRegister() {
   const [email, setEmail] = useState("");
@@ -11,9 +14,20 @@ export default function ParticipantRegister() {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     setIsLoading(true); // Show loader while the request is in progress
     setError(""); // Reset error
 
@@ -76,7 +90,12 @@ export default function ParticipantRegister() {
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden flex items-center justify-center">
-      <div className="w-full max-w-md p-8 rounded-lg bg-white bg-opacity-10 backdrop-blur-md shadow-lg">
+      {/* Logo at the top, redirect to home page */}
+      <a href="/" className="absolute top-4 left-4">
+        <Image src={pramanitLogo} alt="Pramanit Logo" width={50} height={50} />
+      </a>
+
+      <div className="w-full max-w-md p-8 rounded-lg bg-white bg-opacity-20 backdrop-blur-md shadow-lg">
         <h2 className="text-3xl font-semibold mb-6 text-center text-white">Participant Register</h2>
         <form onSubmit={handleRegister}>
           <div className="mb-4">
@@ -85,7 +104,7 @@ export default function ParticipantRegister() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 rounded bg-gray-700 text-white"
+              className="w-full p-2 rounded bg-white text-black"
               required
             />
           </div>
@@ -95,19 +114,25 @@ export default function ParticipantRegister() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 rounded bg-gray-700 text-white"
+              className="w-full p-2 rounded bg-white text-black"
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label className="block text-sm mb-2 text-gray-300">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 rounded bg-gray-700 text-white"
+              className="w-full p-2 rounded bg-white text-black"
               required
             />
+            <div
+              className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-2xl"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash className="text-black" /> : <FaEye className="text-black" />}
+            </div>
           </div>
           <button
             type="submit"
@@ -142,7 +167,7 @@ export default function ParticipantRegister() {
                 <label className="block text-white text-sm mb-1">OTP</label>
                 <input
                   type="text"
-                  className="w-full p-2 rounded bg-gray-700 text-white"
+                  className="w-full p-2 rounded bg-white text-black"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   required
