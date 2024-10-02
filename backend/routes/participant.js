@@ -9,6 +9,7 @@ const Participant = require('../models/participant');
 const EmailVerification = require('../models/emailVerification');
 const checkRole = require('../middleware/checkRole');
 const verifyToken = require('../middleware/verifyToken');
+const axios = require = require('axios');
 const server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io/");
 
 
@@ -38,7 +39,7 @@ router.get('/',verifyToken, checkRole(("participant")), async (req, res) => {
   }
 });
 
-router.get('/login', async (req, res)=> {
+router.post('/login', async (req, res)=> {
    const { email, password } = req.body;
   
    try{
@@ -162,7 +163,7 @@ try {
   }
   catch(e){
     console.log("error in registering");
-    res.status(500).json({error:"error in registering"})
+    res.status(500).json({error:"error in registering", message: e.message})
   }
 
 })

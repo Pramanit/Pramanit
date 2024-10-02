@@ -3,19 +3,75 @@
 import { useState } from "react";
 
 export default function ParticipantRegister() {
-  const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [otp, setOtp] = useState("");
+  const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate sending OTP
-    setIsOtpPopupOpen(true); // Open OTP popup after registration form is submitted
+    setIsLoading(true); // Show loader while the request is in progress
+    setError(""); // Reset error
+
+    const payload = { name, email, password };
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/participant/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      setIsLoading(false); // Hide loader
+
+      if (response.ok) {
+        // If registration is successful, show OTP input
+        setMessage("Registration successful! Please check your email for OTP.");
+        setIsOtpPopupOpen(true); // Open OTP popup after registration
+      } else {
+        // Display error if registration fails
+        setError(data.message || "Registration failed.");
+      }
+    } catch (err: any) {
+      setIsLoading(false); // Hide loader
+      setError("An error occurred during registration.");
+      console.error("Error:", err.message);
+    }
   };
 
-  const handleOtpSubmit = (e: React.FormEvent) => {
+  const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle OTP validation logic
-    console.log("OTP submitted:", otp);
+    setIsLoading(true); // Show loader for OTP verification
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/participant/verifyEmail`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, otp }), // Send email and OTP for verification
+      });
+
+      const data = await response.json();
+      setIsLoading(false); // Hide loader
+
+      if (response.ok) {
+        setMessage("OTP verified successfully! You can now log in.");
+        setIsOtpPopupOpen(false); // Close OTP popup after successful verification
+      } else {
+        setError(data.message || "Invalid OTP.");
+      }
+    } catch (err: any) {
+      setIsLoading(false);
+      setError("An error occurred while verifying OTP.");
+      console.error("Error:", err.message);
+    }
   };
 
   return (
@@ -27,6 +83,8 @@ export default function ParticipantRegister() {
             <label className="block text-sm mb-2 text-gray-300">User Name</label>
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
@@ -35,6 +93,8 @@ export default function ParticipantRegister() {
             <label className="block text-sm mb-2 text-gray-300">Email</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
@@ -43,6 +103,8 @@ export default function ParticipantRegister() {
             <label className="block text-sm mb-2 text-gray-300">Password</label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
@@ -50,13 +112,21 @@ export default function ParticipantRegister() {
           <button
             type="submit"
             className="w-full py-2 bg-blue-600 rounded text-white hover:bg-blue-700 transition-colors"
+            disabled={isLoading} // Disable button while loading
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
+
+        {/* Error message */}
+        {error && <p className="mt-4 text-center text-red-500">{error}</p>}
+
+        {/* Success message */}
+        {message && <p className="mt-4 text-center text-green-500">{message}</p>}
+
         <p className="mt-4 text-center text-gray-400">
           Already have an account?{" "}
-          <a href="/participant/login" className="text-blue-400 hover:underline">
+          <a href="/certificates/login" className="text-blue-400 hover:underline">
             Login here
           </a>
         </p>
@@ -92,6 +162,13 @@ export default function ParticipantRegister() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Loading Spinner */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+          <div className="loader"></div>
         </div>
       )}
     </div>
