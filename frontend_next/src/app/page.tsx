@@ -15,13 +15,21 @@ export default function Home() {
       <Navbar />
       <Hero />
       <LogoTicker />
-      
-      <Features />
-      
+
+      <section id="features">
+        <Features />
+      </section>
+
       <ProductShowcase />
-      <FAQs />
+
+      <section id="faq">
+        <FAQs />
+      </section>
+
+      <section id="pricing">
       <Pricing/>
-     
+      </section>
+
       </div>
       <Footer />
     </>
