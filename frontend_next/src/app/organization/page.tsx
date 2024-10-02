@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import profilePhoto from '@/assets/images/organisation.jpeg'; // Import the profile image
+import profilePhoto from '@/assets/images/organization-3d.jpg'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 import blueTick from '@/assets/images/bluetick1.png'; // Import the blue tick image
+
 // Define the Event type
 interface EventType {
   event: string; // or whatever properties your event has
@@ -16,6 +17,8 @@ export default function OrganizationsPage() {
   const [isVerified] = useState(true); // Replace this with actual verification logic
   const [isFormOpen, setIsFormOpen] = useState(false); // State to handle form visibility
   const router = useRouter();
+  
+  // State to hold the list of events
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -29,24 +32,14 @@ export default function OrganizationsPage() {
       description: 'An exhibition showcasing local artists.',
       dateTime: '2024-10-05 2:00 PM',
     },
-    {
-        id: 1,
-        eventName: 'Coding Workshop',
-        description: 'A workshop on modern web development.',
-        dateTime: '2024-09-30 10:00 AM',
-      },
-      {
-        id: 2,
-        eventName: 'Art Exhibition',
-        description: 'An exhibition showcasing local artists.',
-        dateTime: '2024-10-05 2:00 PM',
-      },
+    // Duplicate events removed to avoid redundancy
   ]);
-// Update the handleAddEvent function
+
+  // Update the handleAddEvent function
   const handleAddEvent = (event: any) => { 
-  setEvents([...events, { ...event, id: events.length + 1 }]);
-  setIsFormOpen(false);
-};
+    setEvents([...events, { ...event, id: events.length + 1 }]);
+    setIsFormOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
@@ -55,7 +48,10 @@ export default function OrganizationsPage() {
       <div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
         <h1 className="text-lg font-semibold">Organization Dashboard</h1>
         <div>
-          <Image src={logo} alt="Logo" className="w-12 h-12" width={48} height={48} />
+          {/* Redirect to home page when logo is clicked */}
+          <a href="/">
+            <Image src={logo} alt="Logo" className="w-12 h-12" width={48} height={48} />
+          </a>
         </div>
       </div>
 
@@ -75,6 +71,7 @@ export default function OrganizationsPage() {
 
       {/* Centered Events Title */}
       <h2 className="text-3xl font-semibold mt-10 mb-6 text-center text-white">Events List</h2>
+      
       {/* Table Section */}
       <div className="overflow-x-auto px-4 mb-4">
         <table className="min-w-full bg-white bg-opacity-10 backdrop-blur-md border border-gray-300 rounded-lg shadow-lg">
@@ -86,17 +83,17 @@ export default function OrganizationsPage() {
             </tr>
           </thead>
           <tbody>
-          {events.map((event) => (
-    <tr
-      key={event.id}
-      className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer"
-      onClick={() => router.push(`/organization/event/${event.id}`)} // Navigate to event detail page
-    >
-      <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
-      <td className="py-2 px-4 border-b text-white">{event.description}</td>
-      <td className="py-2 px-4 border-b text-white">{event.dateTime}</td>
-    </tr>
-  ))}
+            {events.map((event) => (
+              <tr
+                key={event.id}
+                className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer"
+                onClick={() => router.push(`/organization/event/${event.id}`)} // Navigate to event detail page
+              >
+                <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
+                <td className="py-2 px-4 border-b text-white">{event.description}</td>
+                <td className="py-2 px-4 border-b text-white">{event.dateTime}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -104,12 +101,12 @@ export default function OrganizationsPage() {
       {/* Create Event Button */}
       <div className="flex z-10 justify-center mt-6">
         <div className=''>
-        <button
-          className="px-6 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700 transition-colors"
-          onClick={() => setIsFormOpen(true)}
-        >
-          Create Event
-        </button>
+          <button
+            className="px-6 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700 transition-colors"
+            onClick={() => setIsFormOpen(true)}
+          >
+            Create Event
+          </button>
         </div>
       </div>
 
@@ -153,8 +150,8 @@ export default function OrganizationsPage() {
                 >
                   Cancel
                 </button>
-                </div>
-              </form>
+              </div>
+            </form>
           </div>
         </div>
       )}
