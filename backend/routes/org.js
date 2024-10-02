@@ -163,7 +163,7 @@ router.get("/event/:eventId", verifyToken, checkRole(("organization")), async (r
 
   try {
     const event = await Event.findOne({ eventId, organisedBy: email });
-
+    const certs = await Certificate.find({eventId});
     if (!event) {
       return res.status(404).json({ message: 'Event not found or you do not have access' });
     }
@@ -171,10 +171,11 @@ router.get("/event/:eventId", verifyToken, checkRole(("organization")), async (r
     res.status(200).json({
       message: 'Event details retrieved successfully',
       event,
+    certificates: certs
     });
   } catch (e) {
-    console.error('Error fetching event:', error);
-    res.status(500).json({ message: 'Error fetching event', error });
+    console.error('Error fetching event:', e);
+    res.status(500).json({ message: 'Error fetching event', e });
   }
 
 })
