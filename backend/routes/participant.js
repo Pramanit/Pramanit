@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { auth } = require('express-openid-connect');
 const { requiresAuth } = require('express-openid-connect');
-// const auth0ConfigParticipant = require('../auth0ConfigParticipant');
 const Certificate = require('../models/certificate'); // Your certificate model
+const checkRole = require('../middleware/checkRole');
 
 
-// router.use(auth(auth0ConfigParticipant));
-// Route for handling participant requests
-router.get('/', requiresAuth(), async (req, res) => {
+
+
+// Route for handling participant requests 
+
+router.get('/', checkRole('participant'), async (req, res) => {
   try {
     // Ensure the user is authenticated
     if (!req.oidc.isAuthenticated()) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-
+      console.log("hello")
     // Get the user's email from the Auth0 profile
     const userEmail = req.oidc.user.email;
 
@@ -35,7 +36,44 @@ router.get('/', requiresAuth(), async (req, res) => {
   }
 });
 
+router.get('/login', (req, res) => {
+  console.log("Login route accessed");
+  if (req.oidc.isAuthenticated()) {
+      console.log("User is already authenticated");
+      return res.redirect('/participant');
+  }
 
+  console.log("User not authenticated, initiating login");
+  res.oidc.login({ 
+    authorizationParams: { 
+      prompt: 'login', 
+      connection: 'participants', 
+      state: '/participant' 
+    } 
+  });
+});
+
+// Handle callback logic from Auth0
+router.get('/callback', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    // If user is authenticated, redirect to the desired page
+    return res.redirect(req.query.state || '/participant');
+  } else {
+    // Log errors for better debugging
+    console.error('Authentication failed:', req.oidc);
+    res.status(401).json({ message: 'User not authenticated' });
+  }
+});
+
+
+router.get('/logout', (req, res) => {
+  res.oidc.logout({
+      returnTo: 'http://localhost:3000/', // Redirect after logout
+      logoutParams: {
+          federated: true, // This logs the user out of Auth0 and any other identity providers
+      },
+  });
+});
 
 module.exports = router;
 

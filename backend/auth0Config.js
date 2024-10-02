@@ -1,11 +1,14 @@
 
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
   authRequired: false,
   auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
-  baseURL: 'http://localhost:3000/org',
-  clientID: 'nDNqz1KzFiam2buVWrmx1yfZlJzIm8wi',
-  issuerBaseURL: 'https://dev-wkux0vns83hhvzha.us.auth0.com'
+  secret: process.env.AUTH0_SECRET,
+  baseURL: process.env.AUTH0_BASE_URL,
+  clientID: process.env.AUTH0_CLIENT_ID,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
 };
 

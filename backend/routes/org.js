@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { auth } = require('express-openid-connect');
 const cloudinary = require('cloudinary').v2;
 const { requiresAuth } = require('express-openid-connect');
 const dotenv = require('dotenv');
-// const auth0Config = require('../auth0Config');
 const Org = require("../models/org");
 const Event = require("../models/event");
 const DiamSdk = require("diamnet-sdk");
 const axios = require('axios');
 const Certificate = require("../models/certificate")
 const Participant = require("../models/participant")
-const encrypt = require("../utils.js/encrypt")
+const encrypt = require("../utils.js/encrypt");
+const checkRole = require('../middleware/checkRole');
 
 const server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io/");
 
@@ -33,10 +32,13 @@ cloudinary.config({
 });
 
 
-// router.use(auth(auth0Config));
+
+// router.use(checkRole('organization'));
 
 
-  router.get('/', requiresAuth(), async (req, res) => {
+
+
+  router.get('/', async (req, res) => {
     const email = req.oidc.user.email; // Ensure req.oidc contains the email
     const name = req.oidc.user.name; // Ensure req.oidc contains the name
 
@@ -94,7 +96,7 @@ cloudinary.config({
 
 
 //to be done later
-router.post('/editInfo',auth(auth0ConfigOrg), async (req, res)=> {
+router.post('/editInfo', async (req, res)=> {
   const file = req.file;
 
   if(file){
@@ -357,5 +359,40 @@ router.get("/verify/:verificationId", async (req, res)=> {
 }
 
 })
+
+
+router.get('/login', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    // If the user is already authenticated, redirect them to the desired page
+    return res.redirect('/org');
+  }
+
+  res.oidc.login({ 
+    authorizationParams: { 
+      prompt: 'login', 
+      connection: 'organizations', 
+      state: '/org' 
+    } 
+  });
+});
+
+// Handle callback logic from Auth0
+router.get('/callback', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    // If user is authenticated, redirect to the desired page
+    res.redirect(req.query.state || '/org');
+  } else {
+    res.status(401).json({ message: 'User not authenticated' });
+  }
+});
+
+router.get('/logout', (req, res) => {
+  res.oidc.logout({
+    returnTo: '/', // Redirect after logout
+    logoutParams: {
+      federated: true, // This logs the user out of Auth0 and any other identity providers
+    },
+  });
+});
 
 module.exports = router;
