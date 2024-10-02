@@ -19,9 +19,21 @@ const participantSchema = new mongoose.Schema({
     required: true,
     unique: true,
     match: [/.+\@.+\..+/, 'Please enter a valid email address']
+  },
+  password: {
+    type: String,
+    select: false
+  },
+  role: {
+    type: String,
+    defualt: "participant"
+      },
+  emailVerification: {
+    type: Boolean,
+    default: false
   }
 }, {
-  timestamps: true // Automatically adds `createdAt` and `updatedAt` fields
+  timestamps: true 
 });
 
 const Participant = mongoose.model('Participant', participantSchema);
