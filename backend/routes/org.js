@@ -91,7 +91,7 @@ cloudinary.config({
         
       }
       let orgDetails = await Org.findOne({email});
-      let EventDetails = await Event.findOne({organisedBy: email});
+      let EventDetails = await Event.find({organisedBy: email});
       console.log("44")
       res.status(200).json({ message: 'Organization is verified.', org: orgDetails, events: EventDetails });
       
@@ -147,7 +147,7 @@ router.post("/createEvent", verifyToken, checkRole(("organization")), async (req
 
   const savedEvent = await newEvent.save();
 
-    res.redirect(`/org/event/${savedEvent.eventId}`)
+    res.status(200).json({message:"Event Created", success: true, savedEvent: savedEvent})
   } catch(e) {
     console.log("error in /creatEvent", e.message)
     res.status(500).json({msg: e.message, error:true })

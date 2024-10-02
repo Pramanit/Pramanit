@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import profilePhoto from '@/assets/images/umesh.png'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
+import { useRouter } from "next/navigation";
 
 interface Certificate {
   id: string;
@@ -22,7 +23,7 @@ export default function CertificatesPage() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [userDetails, setUserDetails] = useState<any>("");
-
+  const router = useRouter();
   const handleLogout = () => {
     setIsLoggedIn(false);
     window.location.href = "/";
@@ -34,7 +35,7 @@ export default function CertificatesPage() {
       const token = localStorage.getItem('token'); // Assuming the auth token is stored in localStorage
 
       if (!token) {
-        setError('Unauthorized access. Please log in.');
+        router.push("/org/login");
         return;
       }
 
