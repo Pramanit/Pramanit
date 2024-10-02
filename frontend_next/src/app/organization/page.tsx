@@ -6,6 +6,7 @@ import Image from 'next/image';
 import profilePhoto from '@/assets/images/organization-3d.jpg'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 import blueTick from '@/assets/images/bluetick1.png'; // Import the blue tick image
+import Loader from '@/components/loader';
 
 interface EventType {
   id: number;
@@ -50,7 +51,9 @@ export default function OrganizationsPage() {
   // Handle adding new events
   const handleAddEvent = async (event: Omit<EventType, 'id'>) => {
     const token = localStorage.getItem('token'); // Get the token from localStorage
-    
+    if(!token){
+      router.push("/org/login")
+    }
     try {
       // Send a POST request to the backend to save the new event
       const response = await axios.post(
@@ -128,7 +131,7 @@ export default function OrganizationsPage() {
               <tr
                 key={event.id}
                 className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer"
-                onClick={() => router.push(`/organization/event/${event.id}`)} // Navigate to event detail page
+                onClick={() => router.push(`/organization/event/${event.eventId}`)} // Navigate to event detail page
               >
                 <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
                 <td className="py-2 px-4 border-b text-white">{event.description}</td>
