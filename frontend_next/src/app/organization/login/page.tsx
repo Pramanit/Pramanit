@@ -1,9 +1,52 @@
 "use client";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
-export default function OrganizationLogin() {
-  const handleLogin = (e: React.FormEvent) => {
+export default function ParticipantLogin() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const router = useRouter(); // Initialize useRouter
+
+  // Check for token and redirect if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      router.push("/organization"); // Redirect if token is present
+    }
+  }, [router]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic
+
+    const payload = { email, password }; // Only email and password for login
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/organization/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful");
+
+        // Store the token in localStorage if login is successful
+        localStorage.setItem('token', data.token);
+
+        // Redirect user after successful login
+        router.push("http://localhost:3000/organization"); // Change this to the route you want to redirect to
+      } else {
+        setMessage(data.error || "Login failed");
+      }
+    } catch (error: any) {
+      console.error('Error:', error.message);
+      setMessage('An error occurred while logging in');
+    }
   };
 
   return (
@@ -15,6 +58,8 @@ export default function OrganizationLogin() {
             <label className="block text-sm mb-2 text-gray-300">Email</label>
             <input
               type="email"
+              value={email} // Bind the state to input value
+              onChange={(e) => setEmail(e.target.value)} // Update state on change
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
@@ -23,6 +68,8 @@ export default function OrganizationLogin() {
             <label className="block text-sm mb-2 text-gray-300">Password</label>
             <input
               type="password"
+              value={password} // Bind the state to input value
+              onChange={(e) => setPassword(e.target.value)} // Update state on change
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
