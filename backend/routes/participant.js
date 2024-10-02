@@ -27,7 +27,8 @@ router.get('/',verifyToken, checkRole(("participant")), async (req, res) => {
 
     // If no certificates are found
     if (!certificates.length) {
-      return res.status(200).json({ message: 'No certificates found for this user', count:"0" });
+      return res.status(200).json({ message: 'No certificates found for this user', count:"0", email: req.user.email,
+        name: req.user.name, });
     }
     response = {
       certificates: certificates,
