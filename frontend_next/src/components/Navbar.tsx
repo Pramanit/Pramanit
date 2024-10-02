@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import LogoImage from '../assets/icons/logo.svg';
+import { useRouter } from 'next/navigation'; // Use Next.js navigation
 
 export const Navbar = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -115,6 +116,8 @@ export const Navbar = () => {
 };
 
 const SignInPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const router = useRouter();
+
   if (!isOpen) return null;
 
   return (
@@ -122,24 +125,28 @@ const SignInPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
       <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-96 relative">
         <h2 className="text-2xl font-semibold mb-4 text-center text-white">Sign in as</h2>
         <div className="flex gap-4">
-          <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full focus:outline-none"
-            onClick={() => {
-              onClose();
-              window.location.href = "/certificates";
-            }}
-          >
-            Participant
-          </button>
-          <button
-            className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full focus:outline-none"
-            onClick={() => {
-              onClose();
-              window.location.href = "/organization";
-            }}
-          >
-            Organization
-          </button>
+          <div className="w-full">
+            <button
+              className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 w-full focus:outline-none"
+              onClick={() => {
+                onClose();
+                router.push("/certificates/login");
+              }}
+            >
+              Participant Login
+            </button>
+          </div>
+          <div className="w-full">
+            <button
+              className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 w-full focus:outline-none"
+              onClick={() => {
+                onClose();
+                router.push("/organization/login");
+              }}
+            >
+              Organization Login
+            </button>
+          </div>
         </div>
         <button
           className="mt-4 px-4 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700 focus:outline-none w-full"
