@@ -22,11 +22,10 @@ const participantSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    select: false
   },
   role: {
     type: String,
-    defualt: "participant"
+    default: "participant"
       },
   emailVerification: {
     type: Boolean,

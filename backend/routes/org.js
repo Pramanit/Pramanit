@@ -13,6 +13,8 @@ const axios = require('axios');
 const Certificate = require("../models/certificate")
 const Participant = require("../models/participant")
 const EmailVerification = require('../models/emailVerification');
+const verifyToken = require('../middleware/verifyToken');
+const checkRole = require('../middleware/checkRole')
 // const encrypt = require("../utils.js/encrypt");
 // const checkRole = require('../middleware/checkRole');
 
@@ -41,9 +43,9 @@ cloudinary.config({
 
 
 
-  router.get('/', async (req, res) => {
-    const email = req.oidc.user.email; // Ensure req.oidc contains the email
-    const name = req.oidc.user.name; // Ensure req.oidc contains the name
+  router.get('/',verifyToken, checkRole(("organization")), async (req, res) => {
+    const email = req.user.email; // Ensure req.oidc contains the email
+    const name = req.user.name; // Ensure req.oidc contains the name
 
     console.log("Email:", email); // Check if email is available
     console.log("Name:", name); // Check if name is available
@@ -99,7 +101,7 @@ cloudinary.config({
 
 
 //to be done later
-router.post('/editInfo', async (req, res)=> {
+router.post('/editInfo',verifyToken, checkRole(("organization")), async (req, res)=> {
   const file = req.file;
 
   if(file){
@@ -128,14 +130,14 @@ console.log(uploadResult);
 })
 
 // tested
-router.post("/createEvent", requiresAuth(), async (req, res)=> {
+router.post("/createEvent", verifyToken, checkRole(("organization")), async (req, res)=> {
   const eventName = req.body.eventName;
   const eventDescription = req.body.eventDescription;
   const dateTime = req.body.dateTime;
 
   try {
     const newEvent = new Event({
-      organisedBy: req.oidc.user.email,
+      organisedBy: req.user.email,
       eventName: eventName,
       description: eventDescription,
       dateTime: dateTime,
@@ -152,10 +154,10 @@ router.post("/createEvent", requiresAuth(), async (req, res)=> {
 
 
 // tested
-router.get("/event/:eventId", requiresAuth(), async (req, res) => {
+router.get("/event/:eventId", verifyToken, checkRole(("organization")), async (req, res) => {
 
   const { eventId } = req.params;
-  const email = req.oidc.user.email;
+  const email = req.user.email;
 
   try {
     const event = await Event.findOne({ eventId, organisedBy: email });
@@ -177,8 +179,8 @@ router.get("/event/:eventId", requiresAuth(), async (req, res) => {
 
 
 // testing
-router.post("/event/:eventId/createCertificate", requiresAuth(), async (req, res)=> {
-  const email = req.oidc.user.email;
+router.post("/event/:eventId/createCertificate", checkRole(("organization")), verifyToken, async (req, res)=> {
+  const email = req.user.email;
   const eventId = req.params.eventId;
   const issueToName = req.body.name;
   const issuedToEmail = req.body.email;
@@ -396,34 +398,13 @@ router.post("/event/:eventId/createCertificate", requiresAuth(), async (req, res
   }
 })
 
-router.get("/verify/:verificationId", async (req, res)=> {
-
-  const verificationId = req.params.verificationId;
-  
-  try {
-
-
-  const transactionDetails = await server
-  .transactions()
-  .transaction(verificationId)
-  .call();
-
-
-  console.log("Asset details retrieved:", transactionDetails);
-  res.status(200).json({success:true, cert:transactionDetails.memo});
-} catch (e) {
-  console.log(e)
-  res.status(500).json({error:true, msg:e.message})
-}
-
-})
 
 router.get("/login", async (req, res)=> {
   const { email, password } = req.body;
 
   try{
     const organization = await Org.findOne({email});
- 
+    console.log(organization);
     if(!organization){
       return res.status(404).json({message: "User not found"})
     }
@@ -432,14 +413,14 @@ router.get("/login", async (req, res)=> {
     }
  
     if(organization.emailVerification === false){
-     res.status(400).json({message:"This email is not  verified yet"})
+     return res.status(400).json({message:"This email is not  verified yet"})
     }
     const isMatch = await bcrypt.compare(password, organization.password);
     if(!isMatch){
      return res.status(400).json({message:"INVALID INPUTS/INPUT"})
     }
  
-    const token = jwt.sign({email: organization.email, role:"organization"}, process.env.JWT_SECRET, {expiresIn: "1h"});
+    const token = jwt.sign({email: organization.email, name: organization.name, role:"organization"}, process.env.JWT_SECRET, {expiresIn: "1h"});
  
     res.status(200).json({token: token});
    } catch (e) {
@@ -497,7 +478,7 @@ router.post("/register", async (req,res)=> {
    </div>
    `;
    const subscribed = true;
-   const name = 'Pramanit';
+   const nameOfCompany = 'Pramanit';
    const headers = {};
    
    // Properly stringify the requestBody object
@@ -506,7 +487,7 @@ router.post("/register", async (req,res)=> {
        subject: subject,
        body: bodyContent,
        subscribed: subscribed,
-       name: name,
+       name: nameOfCompany,
        headers: headers,
        metadata:{
          accountType: "organization"
@@ -537,38 +518,42 @@ router.post("/register", async (req,res)=> {
 
 })
 
-router.post("/verifyEmail", async (req,res)=> {
+router.post("/verifyEmail", async (req, res) => {
   const { email, otp } = req.body;
-  try{
-   const verificationParticipant = EmailVerification.findOne({email});
- 
-   if (!verificationParticipant) {
-     return res.status(400).json({ error: true, message: "No verification record found" });
-   }
- 
-   if(verificationParticipant.otp !== otp){
-     return res.status(400).json({error: true, message: "wrong otp"});
-   }
-   if(verificationParticipant.role !== "organization"){
-     return res.status(400).json({error: true, message: "unauthorized"});
-   }
-   
-     
-     await Participant.findOneAndUpdate({email: email, role:"organization"}, {emailVerification: true});
-     // const participant = new Participant.findOne({email: email});
-     // if(!participant){
-     //   return res.status(404).json({message: "User not found"})
-     // }
-     // if(!isMatch){
-     //  return res.status(400).json({message:"INVALID INPUTS/INPUT"})
-     // }
-  
-     // const token = jwt.sign({email: participant.email, role:"participant"}, process.env.JWT_SECRET, {expiresIn: "1h"});
-     return res.status(200).json({message:"email verified", success: true})
- } catch(err) {
-   res.status(500).json({message:"Internal Server Error"})
- }
-})
+  try {
+    const verificationOrg = await EmailVerification.findOne({ email: email, role:"organization" });
+
+    if (!verificationOrg) {
+      return res.status(400).json({ error: true, message: "No verification record found" });
+    }
+
+    if (verificationOrg.otp !== otp) {
+      return res.status(400).json({ error: true, message: "Wrong OTP" });
+    }
+
+    if (verificationOrg.role !== "organization") {
+      return res.status(400).json({ error: true, message: "Unauthorized" });
+    }
+
+    // Update the emailVerification field to true
+    const updatedOrg = await Org.findOneAndUpdate(
+      { email: email, role: "organization" },
+      { emailVerification: true },
+      { new: true } // This option returns the updated document
+    );
+
+    // Check if the document was updated
+    if (!updatedOrg) {
+      return res.status(404).json({ error: true, message: "Organization not found or not updated" });
+    }
+
+    res.status(200).json({ message: "Email verified! Now you can log in", success: true });
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 
 
