@@ -22,7 +22,7 @@ export default function OrganizationRegister() {
     setErrorMessage("");
     try {
       // Send a POST request to the backend API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,9 +44,32 @@ export default function OrganizationRegister() {
     }
   };
 
-  const handleOtpSubmit = (e: any) => {
+  const handleOtpSubmit = async (e: any) => {
     e.preventDefault();
-    // Handle OTP validation logic here
+    setErrorMessage("");
+    try {
+      const payload = {email: formData.email, otp: otp};
+      // Send a POST request to the backend API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/verifyEmail`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        setIsOtpPopupOpen(false); // Open OTP popup after successful registration
+      } else {
+        setErrorMessage(data.message || "OTP failed");
+      }
+    } catch (err) {
+      console.error("Error during otp verification:", err);
+      setErrorMessage("An error occurred during error verifcation");
+    }
     console.log("OTP submitted:", otp);
   };
 
