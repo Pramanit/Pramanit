@@ -2,6 +2,7 @@
 import OneImage from '../assets/images/imageone.png'
 import TwoImage from '../assets/images/imagetwo.png'
 import Image from 'next/image';
+import Link from 'next/link';
 import {motion} from 'framer-motion'
 
 export const Hero = () => {
@@ -63,9 +64,11 @@ export const Hero = () => {
         </div>
 
         <div className="flex justify-center mt-8">
-          <button className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg">
-            Verify Now!
-          </button>
+          <Link href="\verify">
+            <button className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg">
+              Verify Now!
+            </button>
+          </Link>
         </div>
 
       </div>
