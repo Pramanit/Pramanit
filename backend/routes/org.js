@@ -248,7 +248,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
   const assetName = `Cert${issueToName.slice(0, 2)}${eventId.slice(0, 2)}`;
   const certificateAsset = new DiamSdk.Asset(assetName, issuingKeyPair.publicKey());
 
-  const compressedData = lzjs.compress(original);
+  // const compressedData = lzjs.compress(original);
 
 
   //**
