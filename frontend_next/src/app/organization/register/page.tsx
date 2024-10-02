@@ -22,7 +22,7 @@ export default function OrganizationRegister() {
     setErrorMessage("");
     try {
       // Send a POST request to the backend API
-      const response = await fetch("/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

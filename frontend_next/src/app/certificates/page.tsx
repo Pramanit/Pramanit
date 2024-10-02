@@ -26,6 +26,7 @@ export default function CertificatesPage() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     window.location.href = "/";
+    localStorage.removeItem('token');
   };
 
   useEffect(() => {
@@ -49,12 +50,14 @@ export default function CertificatesPage() {
         }
 
         const data = await response.json();
+        setUserDetails({ email: data.email, name: data.name });
+        console.log(data)
         if (!data.certificates || data.certificates.length === 0) {
           setMessage("You don't have any certificates in your name.");
         } else {
           setCertificates(data.certificates || []); // Safely set certificates
         }
-        setUserDetails({ email: data.email, name: data.name });
+
       } catch (error) {
         setError((error as Error).message);
       } finally {
@@ -108,6 +111,8 @@ export default function CertificatesPage() {
           <div className="text-left">
             <h2 className="text-gray-300 text-sm">Participant Name</h2>
             <span className="text-2xl font-semibold">{userDetails.name}</span>
+            <h2 className="text-gray-300 text-sm">Email</h2>
+            <span className="text-2xl font-semibold">{userDetails.email}</span>
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ export default function CertificateVerification() {
 
     try {
       // Make a request to your Express.js backend
-      const response = await fetch(`http://localhost:3003/verify/${inputId.trim()}`);
+      const response = await fetch(`http://localhost:3000/verify/${inputId.trim()}`);
 
       if (!response.ok) {
         throw new Error("Failed to verify certificate");
