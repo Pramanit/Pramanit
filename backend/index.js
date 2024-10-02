@@ -5,7 +5,7 @@ const { auth } = require('express-openid-connect');
 const auth0Config = require('./auth0Config');
 //db connection import
 const connectToDatabase = require('./db');
-const { requiresAuth } = require('express-openid-connect');
+
 
 
 //routes import
@@ -35,8 +35,8 @@ app.use(auth({
 app.use('/verify', verifyRouter); // This route will be accessible without authentication
 
 // Protect /org and /participant routes with Auth0 middleware
-app.use('/org', requiresAuth(), orgRouter); // Protect org routes
-app.use('/participant', requiresAuth(), participantRouter); // Protect participant routes
+app.use('/org', orgRouter); // Protect org routes
+app.use('/participant', participantRouter); // Protect participant routes
 
 
 app.get('/', (req, res) => {
