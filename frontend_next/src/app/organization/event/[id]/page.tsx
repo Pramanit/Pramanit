@@ -1,7 +1,7 @@
 "use client"; // Make this a Client Component
 
 import { useParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import logo from '@/assets/images/pramanit3.png'; // Import the blue tick image
 
@@ -12,37 +12,83 @@ interface EventType {
   dateTime: string;
 }
 
-const eventsData: EventType[] = [
-  {
-    eventName: 'Coding Workshop',
-    description: 'A workshop on modern web development.',
-    dateTime: '2024-09-30 10:00 AM',
-  },
-  {
-    eventName: 'Art Exhibition',
-    description: 'An exhibition showcasing local artists.',
-    dateTime: '2024-10-05 2:00 PM',
-  },
-  // Add more events as needed
-];
 export const runtime = 'edge';
+
 export default function EventPage() {
   const { id } = useParams(); // Get the event ID from the URL
-  const event = eventsData[Number(id) - 1]; // Fetch the event based on the ID
+  const [event, setEvent] = useState<EventType | null>(null); // State to store the event data
   const [isFormOpen, setIsFormOpen] = useState(false); // State to manage popup visibility
+  const [loading, setLoading] = useState(true); // State for loading
+  const [error, setError] = useState<string | null>(null); // State for error handling
+
+  // Fetch event details from the API
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/event/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're storing the JWT in localStorage
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch event details');
+        }
+
+        const data = await response.json();
+        setEvent(data.event); // Set the event data
+        setLoading(false); // Stop the loading state
+      } catch (error: any) {
+        console.error('Error fetching event details:', error);
+        setError(error.message); // Set the error message
+        setLoading(false); // Stop the loading state
+      }
+    };
+
+    fetchEvent();
+  }, [id]);
 
   // Function to handle form submission
-  const handleGenerateCertificate = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleGenerateCertificate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
     const certificateData = {
-      email: formData.get("email"),
-      participantName: formData.get("participantName"),
-      prizePosition: formData.get("prizePosition"),
+      name: formData.get("participantName") as string,
+      email: formData.get("email") as string,
+      prize: formData.get("prizePosition") as string,
+      dateTime: event?.dateTime, // Fetching the date from the event data
     };
-    console.log('Certificate Data:', certificateData); // Handle form data here
-    setIsFormOpen(false); // Close the form after submission
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/event/${id}/createCertificate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Send the JWT token
+        },
+        body: JSON.stringify(certificateData), // Convert certificate data to JSON
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate certificate');
+      }
+
+      const data = await response.json();
+      console.log('Certificate generated successfully:', data);
+      setIsFormOpen(false); // Close the form after submission
+    } catch (error) {
+      console.error('Error generating certificate:', error);
+    }
   };
+
+  if (loading) {
+    return <div className="text-center text-white">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
@@ -57,8 +103,8 @@ export default function EventPage() {
       {/* Event Details Card */}
       <div className="flex justify-center mt-20 mb-20">
         <div className="">
-          <h2 className="text-4xl font-semibold mb-4 text-center">{event?.eventName}</h2>
-          <p className="text-gray-300 mb-4 text-center italic">{event?.description}</p>
+          <h2 className="text-4xl font-semibold mb-4 text-center">Event Name: {event?.eventName}</h2>
+          <p className="text-gray-300 mb-4 text-center italic">Description: {event?.description}</p>
           <p className="text-gray-400 text-center">Date & Time: {event?.dateTime}</p>
         </div>
       </div>
