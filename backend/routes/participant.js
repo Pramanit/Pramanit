@@ -4,25 +4,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { requiresAuth } = require('express-openid-connect');
 const Certificate = require('../models/certificate'); // Your certificate model
-const checkRole = require('../middleware/checkRole');
 const DiamSdk = require("diamnet-sdk");
 const Participant = require('../models/participant');
 const EmailVerification = require('../models/emailVerification');
+const checkRole = require('../middleware/checkRole');
+const verifyToken = require('../middleware/verifyToken');
 const server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io/");
 
 
 
 // Route for handling participant requests 
 
-router.get('/', async (req, res) => {
+router.get('/',verifyToken, checkRole(("participant")), async (req, res) => {
   try {
     // Ensure the user is authenticated
-    if (!req.oidc.isAuthenticated()) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
       console.log("hello")
-    // Get the user's email from the Auth0 profile
-    const userEmail = req.oidc.user.email;
+    const userEmail = req.user.email;
 
     // Query the database for certificates issued to the logged-in user
     const certificates = await Certificate.find({ issuedToEmail: userEmail });
@@ -46,7 +43,7 @@ router.get('/login', async (req, res)=> {
   
    try{
    const participant = await Participant.findOne({email});
-
+    console.log(participant);
    if(!participant){
      return res.status(404).json({message: "User not found"})
    }
@@ -55,14 +52,14 @@ router.get('/login', async (req, res)=> {
    }
 
    if(participant.emailVerification === false){
-    res.status(400).json({message:"This email is not  verified yet"})
+    return res.status(400).json({message:"This email is not  verified yet"})
    }
    const isMatch = await bcrypt.compare(password, participant.password);
    if(!isMatch){
     return res.status(400).json({message:"INVALID INPUTS/INPUT"})
    }
 
-   const token = jwt.sign({email: participant.email, role:"participant"}, process.env.JWT_SECRET, {expiresIn: "1h"});
+   const token = jwt.sign({email: participant.email, role:"participant", name:participant.name}, process.env.JWT_SECRET, {expiresIn: "1h"});
 
    res.status(200).json({token: token});
   } catch (e) {
@@ -122,7 +119,7 @@ try {
     </div>
     `;
     const subscribed = true;
-    const name = 'Pramanit';
+    const nameOfCompany = 'Pramanit';
     const headers = {};
     
     // Properly stringify the requestBody object
@@ -131,7 +128,7 @@ try {
         subject: subject,
         body: bodyContent,
         subscribed: subscribed,
-        name: name,
+        name: nameOfCompany,
         headers: headers,
         metadata:{
           accountType: "participant"
@@ -154,7 +151,7 @@ try {
 
 
    //response
-   res.status(200).json({message:"An Email verification link has been sent to your inbox"});
+   res.status(200).json({message:"An Email verification otp has been sent to your inbox"});
   }
   catch(e){
     console.log("error in registering");
@@ -166,8 +163,10 @@ try {
 router.post('/verifyEmail', async (req, res)=>{
   const { email, otp } = req.body;
  try{
-  const verificationParticipant = EmailVerification.findOne({email});
-
+  const verificationParticipant = await EmailVerification.findOne({email: email, role:"participant"});
+  console.log("Verification Participant:", verificationParticipant);
+  console.log("Provided OTP:", otp);
+  
   if (!verificationParticipant) {
     return res.status(400).json({ error: true, message: "No verification record found" });
   }
@@ -180,7 +179,8 @@ router.post('/verifyEmail', async (req, res)=>{
   }
   
     
-    await Participant.findOneAndUpdate({email: email, role:"participant"}, {emailVerification: true});
+    const newP = await Participant.findOneAndUpdate({email: email, role:"participant"}, {emailVerification: true}, {new: true});
+  console.log("new",newP);
     // const participant = new Participant.findOne({email: email});
     // if(!participant){
     //   return res.status(404).json({message: "User not found"})
@@ -188,9 +188,9 @@ router.post('/verifyEmail', async (req, res)=>{
     // if(!isMatch){
     //  return res.status(400).json({message:"INVALID INPUTS/INPUT"})
     // }
- 
+  
     // const token = jwt.sign({email: participant.email, role:"participant"}, process.env.JWT_SECRET, {expiresIn: "1h"});
-    return res.status(200).json({message:"email verified", success: true})
+    res.status(200).json({message:"Email verified! Now You Can Login", success: true})
 } catch(err) {
   res.status(500).json({message:"Internal Server Error"})
 }
