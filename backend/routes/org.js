@@ -179,7 +179,7 @@ router.get("/event/:eventId", verifyToken, checkRole(("organization")), async (r
 
 
 // testing
-router.post("/event/:eventId/createCertificate", checkRole(("organization")), verifyToken, async (req, res)=> {
+router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organization")),  async (req, res)=> {
   const email = req.user.email;
   const eventId = req.params.eventId;
   const issueToName = req.body.name;
