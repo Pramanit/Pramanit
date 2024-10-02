@@ -15,6 +15,8 @@ const Participant = require("../models/participant")
 const EmailVerification = require('../models/emailVerification');
 const verifyToken = require('../middleware/verifyToken');
 const checkRole = require('../middleware/checkRole')
+const compression = require('compression');
+const lzjs = require('lzjs');
 // const encrypt = require("../utils.js/encrypt");
 // const checkRole = require('../middleware/checkRole');
 
@@ -246,6 +248,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
   const assetName = `Cert${issueToName.slice(0, 2)}${eventId.slice(0, 2)}`;
   const certificateAsset = new DiamSdk.Asset(assetName, issuingKeyPair.publicKey());
 
+  const compressedData = lzjs.compress(original);
 
 
   //**
