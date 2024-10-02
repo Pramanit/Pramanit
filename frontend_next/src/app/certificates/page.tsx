@@ -14,6 +14,17 @@ import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 // }
 
 export default function CertificatesPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Assuming user is logged in initially
+
+  const handleLogout = () => {
+    // Here, you can implement your actual logout logic (e.g., clearing tokens, calling logout API)
+    setIsLoggedIn(false);
+    console.log("User logged out");
+    window.location.href = "/"; // Redirect to homepage or login page
+  };
+
+
+// export default function CertificatesPage() {
   
   // const [orgData, setOrgData] = useState<OrgData | null>(null);
   // const [loading, setLoading] = useState<boolean>(true);
@@ -102,6 +113,10 @@ export default function CertificatesPage() {
     // Additional records...
   ];
 
+  if (!isLoggedIn) {
+    return <div>You are logged out</div>;
+  }
+
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
       <div className="absolute h-[375px] w-[750px] sm:w-[1536px] sm:h-[768px] lg:w-[2400px] llg:h-[800px] rounded-[100%] bg-black left-1/2 -translate-x-1/2 border border-[#5A88B0] bg-[radial-gradient(closest-side,#000_82%,#1C3B6B)] top-[calc(100%-96px)] sm:top-[calc(100%-120px)]"></div>
@@ -122,6 +137,14 @@ export default function CertificatesPage() {
           />
         </div>
       </div>
+      
+      {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="mt-0 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition absolute right-10"
+          >
+          Logout
+        </button>
 
       {/* Profile Card Section */}
       <div className="flex justify-center mb-8">
@@ -136,6 +159,8 @@ export default function CertificatesPage() {
           <div className="text-left">
             <h2 className="text-gray-300 text-sm">Participant Name</h2>
             <span className="text-2xl font-semibold">Umesh Sahu</span>
+           
+      
           </div>
         </div>
       </div>

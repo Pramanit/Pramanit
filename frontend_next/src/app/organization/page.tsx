@@ -1,6 +1,7 @@
 "use client"; // Make this a Client Component
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import profilePhoto from '@/assets/images/organisation.jpeg'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
@@ -16,6 +17,7 @@ interface EventType {
 export default function OrganizationsPage() {
   const [isVerified] = useState(true); // Replace this with actual verification logic
   const [isFormOpen, setIsFormOpen] = useState(false); // State to handle form visibility
+  const router = useRouter();
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -89,13 +91,17 @@ export default function OrganizationsPage() {
             </tr>
           </thead>
           <tbody>
-            {events.map((event) => (
-              <tr key={event.id} className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer">
-                <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
-                <td className="py-2 px-4 border-b text-white">{event.description}</td>
-                <td className="py-2 px-4 border-b text-white">{event.dateTime}</td>
-              </tr>
-            ))}
+          {events.map((event) => (
+    <tr
+      key={event.id}
+      className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer"
+      onClick={() => router.push(`/organization/event/${event.id}`)} // Navigate to event detail page
+    >
+      <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
+      <td className="py-2 px-4 border-b text-white">{event.description}</td>
+      <td className="py-2 px-4 border-b text-white">{event.dateTime}</td>
+    </tr>
+  ))}
           </tbody>
         </table>
       </div>
