@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Image from 'next/image';
-import profilePhoto from '@/assets/images/organisation.jpeg'; // Import the profile image
+import profilePhoto from '@/assets/images/organization-3d.jpg'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 import blueTick from '@/assets/images/bluetick1.png'; // Import the blue tick image
 
@@ -88,7 +88,10 @@ export default function OrganizationsPage() {
       <div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
         <h1 className="text-lg font-semibold">Organization Dashboard</h1>
         <div>
-          <Image src={logo} alt="Logo" className="w-12 h-12" width={48} height={48} />
+          {/* Redirect to home page when logo is clicked */}
+          <a href="/">
+            <Image src={logo} alt="Logo" className="w-12 h-12" width={48} height={48} />
+          </a>
         </div>
       </div>
 
@@ -108,6 +111,7 @@ export default function OrganizationsPage() {
 
       {/* Centered Events Title */}
       <h2 className="text-3xl font-semibold mt-10 mb-6 text-center text-white">Events List</h2>
+      
       
       {/* Table Section */}
       <div className="overflow-x-auto px-4 mb-4">
@@ -193,3 +197,4 @@ export default function OrganizationsPage() {
     </div>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import profilePhoto from '@/assets/images/umesh.png'; // Import the profile image
+import profilePhoto from '@/assets/images/profile-3d.jpg'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 import { useRouter } from "next/navigation";
 
