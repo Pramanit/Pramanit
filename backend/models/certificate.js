@@ -24,6 +24,11 @@ const certificateSchema = new mongoose.Schema({
     required: true,
     ref: 'Event'
   },
+  eventName:{
+    type: String,
+    required: true,
+    ref: 'Event'
+  },
   participantName: {
     type: String,
     required: true,

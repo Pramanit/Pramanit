@@ -1,117 +1,69 @@
-// app/certificates/page.tsx
-"use client"
-import React, {useEffect, useState} from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import profilePhoto from '@/assets/images/umesh.png'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 
-
-// interface OrgData {
-//   id: number;
-//   name: string;
-//   verified: boolean;
-  
-// }
+interface Certificate {
+  id: string;
+  eventName: string;
+  issuerEmail: string;
+  prize: string;
+  dateTime: string;
+  issuedTo: string;
+  issuedToEmail: string;
+  verificationId: string;
+}
 
 export default function CertificatesPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Assuming user is logged in initially
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [certificates, setCertificates] = useState<Certificate[]>([]); // Default to an empty array
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [userDetails, setUserDetails] = useState<any>("");
 
   const handleLogout = () => {
-    // Here, you can implement your actual logout logic (e.g., clearing tokens, calling logout API)
     setIsLoggedIn(false);
-    console.log("User logged out");
-    window.location.href = "/"; // Redirect to homepage or login page
+    window.location.href = "/";
   };
 
+  useEffect(() => {
+    const fetchCertificates = async () => {
+      const token = localStorage.getItem('token'); // Assuming the auth token is stored in localStorage
 
-// export default function CertificatesPage() {
-  
-  // const [orgData, setOrgData] = useState<OrgData | null>(null);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
+      if (!token) {
+        setError('Unauthorized access. Please log in.');
+        return;
+      }
 
-  // useEffect(() => {
-  //   const fetchOrgData = async () => {
-  //     try {
-  //       const response = await fetch('/org');
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       const data: OrgData = await response.json();
-  //       setOrgData(data);
-  //     } catch (error) {
-  //       setError((error as Error).message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/participant`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in headers
+          },
+        });
 
-  //   fetchOrgData();
-  // }, []);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-  const certificates = [
-    {
-      id: 1,
-      eventName: 'Hackathon 2024',
-      organisedBy: 'Tech Community',
-      prize: 'First Place',
-      dateTime: '2024-09-15 10:00 AM',
-      issuedTo: 'Umesh Sahu',
-      issuedToEmail: 'johndoe@example.com',
-      verificationId: 'ABC123XYZ',
-    },
-    {
-      id: 2,
-      eventName: 'Coding Challenge',
-      organisedBy: 'Code Masters',
-      prize: 'Runner Up',
-      dateTime: '2024-08-10 02:00 PM',
-      issuedTo: 'Umesh Sahu',
-      issuedToEmail: 'janesmith@example.com',
-      verificationId: 'XYZ789ABC',
-    },
-    {
-        id: 1,
-        eventName: 'Hackathon 2024',
-        organisedBy: 'Tech Community',
-        prize: 'First Place',
-        dateTime: '2024-09-15 10:00 AM',
-        issuedTo: 'Umesh Sahu',
-        issuedToEmail: 'johndoe@example.com',
-        verificationId: 'ABC123XYZ',
-      },
-      {
-        id: 2,
-        eventName: 'Coding Challenge',
-        organisedBy: 'Code Masters',
-        prize: 'Runner Up',
-        dateTime: '2024-08-10 02:00 PM',
-        issuedTo: 'Umesh Sahu',
-        issuedToEmail: 'janesmith@example.com',
-        verificationId: 'XYZ789ABC',
-      },
-      {
-        id: 1,
-        eventName: 'Hackathon 2024',
-        organisedBy: 'Tech Community',
-        prize: 'First Place',
-        dateTime: '2024-09-15 10:00 AM',
-        issuedTo: 'Umesh Sahu',
-        issuedToEmail: 'johndoe@example.com',
-        verificationId: 'ABC123XYZ',
-      },
-      {
-        id: 2,
-        eventName: 'Coding Challenge',
-        organisedBy: 'Code Masters',
-        prize: 'Runner Up',
-        dateTime: '2024-08-10 02:00 PM',
-        issuedTo: 'Umesh Sahu',
-        issuedToEmail: 'janesmith@example.com',
-        verificationId: 'XYZ789ABC',
-      },
-    // Additional records...
-  ];
+        const data = await response.json();
+        if (!data.certificates || data.certificates.length === 0) {
+          setMessage("You don't have any certificates in your name.");
+        } else {
+          setCertificates(data.certificates || []); // Safely set certificates
+        }
+        setUserDetails({ email: data.email, name: data.name });
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCertificates();
+  }, []);
 
   if (!isLoggedIn) {
     return <div>You are logged out</div>;
@@ -123,10 +75,7 @@ export default function CertificatesPage() {
 
       {/* Navbar */}
       <div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
-        {/* Center Title */}
         <h1 className="text-lg font-semibold">Your Dashboard</h1>
-
-        {/* Logo on the right */}
         <div>
           <Image
             src={logo}
@@ -137,14 +86,14 @@ export default function CertificatesPage() {
           />
         </div>
       </div>
-      
+
       {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="mt-0 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition absolute right-10"
-          >
-          Logout
-        </button>
+      <button
+        onClick={handleLogout}
+        className="mt-0 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition absolute right-10"
+      >
+        Logout
+      </button>
 
       {/* Profile Card Section */}
       <div className="flex justify-center mb-8">
@@ -158,45 +107,50 @@ export default function CertificatesPage() {
           />
           <div className="text-left">
             <h2 className="text-gray-300 text-sm">Participant Name</h2>
-            <span className="text-2xl font-semibold">Umesh Sahu</span>
-           
-      
+            <span className="text-2xl font-semibold">{userDetails.name}</span>
           </div>
         </div>
       </div>
 
-      {/* Centered Certificates Title with gap */}
       <h2 className="text-3xl font-semibold mt-10 mb-6 text-center text-white">Certificates</h2>
 
-      {/* Table Section with padding */}
-      <div className="overflow-x-auto px-4">
-        <table className="min-w-full bg-white bg-opacity-10 backdrop-blur-md border border-gray-300 rounded-lg shadow-lg">
-          <thead>
-            <tr className="bg-opacity-20">
-              <th className="py-2 px-4 border-b text-left text-white">Event Name</th>
-              <th className="py-2 px-4 border-b text-left text-white">Organised By</th>
-              <th className="py-2 px-4 border-b text-left text-white">Prize</th>
-              <th className="py-2 px-4 border-b text-left text-white">Date & Time</th>
-              <th className="py-2 px-4 border-b text-left text-white">Issued To</th>
-              <th className="py-2 px-4 border-b text-left text-white">Issued to Email Id</th>
-              <th className="py-2 px-4 border-b text-left text-white">Verification Id</th>
-            </tr>
-          </thead>
-          <tbody>
-            {certificates.map((certificate) => (
-              <tr key={certificate.id} className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer">
-                <td className="py-2 px-4 border-b text-white">{certificate.eventName}</td>
-                <td className="py-2 px-4 border-b text-white">{certificate.organisedBy}</td>
-                <td className="py-2 px-4 border-b text-white">{certificate.prize}</td>
-                <td className="py-2 px-4 border-b text-white">{certificate.dateTime}</td>
-                <td className="py-2 px-4 border-b text-white">{certificate.issuedTo}</td>
-                <td className="py-2 px-4 border-b text-white">{certificate.issuedToEmail}</td>
-                <td className="py-2 px-4 border-b text-white">{certificate.verificationId}</td>
+      {/* Loading State */}
+      {loading && <div className="text-center">Loading certificates...</div>}
+      {message && <div className="text-center">{message}</div>}
+      {/* Error State */}
+      {error && <div className="text-center text-red-500">{error}</div>}
+
+      {/* Certificates Table */}
+      {!loading && !error && certificates.length > 0 && (
+        <div className="overflow-x-auto px-4">
+          <table className="min-w-full bg-white bg-opacity-10 backdrop-blur-md border border-gray-300 rounded-lg shadow-lg">
+            <thead>
+              <tr className="bg-opacity-20">
+                <th className="py-2 px-4 border-b text-left text-white">Event Name</th>
+                <th className="py-2 px-4 border-b text-left text-white">Organised By</th>
+                <th className="py-2 px-4 border-b text-left text-white">Prize</th>
+                <th className="py-2 px-4 border-b text-left text-white">Date & Time</th>
+                <th className="py-2 px-4 border-b text-left text-white">Issued To</th>
+                <th className="py-2 px-4 border-b text-left text-white">Issued to Email Id</th>
+                <th className="py-2 px-4 border-b text-left text-white">Verification Id</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {certificates.map((certificate) => (
+                <tr key={certificate.id} className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer">
+                  <td className="py-2 px-4 border-b text-white">{certificate.eventName}</td>
+                  <td className="py-2 px-4 border-b text-white">{certificate.issuerEmail}</td>
+                  <td className="py-2 px-4 border-b text-white">{certificate.prize}</td>
+                  <td className="py-2 px-4 border-b text-white">{certificate.dateTime}</td>
+                  <td className="py-2 px-4 border-b text-white">{certificate.issuedTo}</td>
+                  <td className="py-2 px-4 border-b text-white">{certificate.issuedToEmail}</td>
+                  <td className="py-2 px-4 border-b text-white">{certificate.verificationId}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

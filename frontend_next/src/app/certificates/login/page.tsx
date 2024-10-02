@@ -12,7 +12,7 @@ export default function ParticipantLogin() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      router.push("/participant"); // Redirect if token is present
+      router.push("/certificates"); // Redirect if token is present
     }
   }, [router]);
 
@@ -39,7 +39,7 @@ export default function ParticipantLogin() {
         localStorage.setItem('token', data.token);
 
         // Redirect user after successful login
-        router.push("http://localhost:3001/certificates"); // Change this to the route you want to redirect to
+        router.push("/certificates"); // Change this to the route you want to redirect to
       } else {
         setMessage(data.error || "Login failed");
       }
