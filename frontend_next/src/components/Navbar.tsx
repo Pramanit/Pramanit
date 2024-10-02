@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import LogoImage from '../assets/icons/logo.svg';
 import { useRouter } from 'next/navigation'; // Use Next.js navigation
 
 export const Navbar = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleLoginClick = () => {
     setIsPopupOpen(true);
@@ -20,9 +22,35 @@ export const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const controlNavbar = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      if (window.scrollY > lastScrollY) {
+        setIsVisible(false);
+        setIsMobileMenuOpen(false); // Close the mobile menu on scroll
+      } else {
+        setIsVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    }
+  }, [lastScrollY]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [controlNavbar]);
+
   return (
     <>
-      <div className="bg-black bg-opacity-30 fixed top-0 left-0 right-0 z-40 backdrop-blur-md rounded-xl shadow-lg">
+      <div className={`bg-black bg-opacity-30 fixed top-0 left-4 right-4 z-40  rounded-b-xl shadow-lg mx-auto max-w-7xl transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
+      style={{ 
+        background: 'rgba(0, 0, 0, 0.5)', // Black with some transparency
+        backdropFilter: 'blur(5px)', // Blur effect
+      }}
+      >
         <div className="px-4">
           <div className="container mx-auto">
             <div className="py-4 flex items-center justify-between">
@@ -45,14 +73,16 @@ export const Navbar = () => {
 
               {/* Mobile Menu */}
               <div
-                className={`absolute top-16 left-0 right-0 bg-black bg-opacity-90 p-8 rounded-b-lg z-50 transition-all duration-300 ease-in-out ${
-                  isMobileMenuOpen ? 'block' : 'hidden'
-                } sm:hidden`}
+                className={`absolute top-20 left-0 right-0 p-8 rounded-lg z-50 transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'block' : 'hidden'} sm:hidden`}
+                style={{ 
+                  background: 'rgba(0, 0, 0, 0.5)', // Black with some transparency
+                  backdropFilter: 'blur(5px)', // Blur effect
+                }}
               >
                 <nav className="text-white flex flex-col gap-4 items-center">
-                  <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">About</a>
-                  <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
-                  <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">Subscribe</a>
+                  <a href="#features" className="text-opacity-60 hover:text-opacity-100 transition">Features</a>
+                  <a href="#faq" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
+                  <a href="#pricing" className="text-opacity-60 hover:text-opacity-100 transition">Pricing</a>
                   <button
                     className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg"
                     onClick={handleLoginClick}
@@ -64,9 +94,9 @@ export const Navbar = () => {
 
               {/* Desktop Navigation */}
               <nav className="text-white gap-6 items-center hidden sm:flex">
-                <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">About</a>
-                <a href="#" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
-                <a href="#pricing" className="text-opacity-60 hover:text-opacity-100 transition">Subscribe</a>
+                <a href="#features" className="text-opacity-60 hover:text-opacity-100 transition">Features</a>
+                <a href="#faq" className="text-opacity-60 hover:text-opacity-100 transition">FAQ</a>
+                <a href="#pricing" className="text-opacity-60 hover:text-opacity-100 transition">Pricing</a>
                 <button
                   className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 px-4 rounded-lg text-white hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transform transition-all duration-1500 ease-in-out hover:shadow-lg"
                   onClick={handleLoginClick}
