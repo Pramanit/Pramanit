@@ -22,7 +22,7 @@ export default function ParticipantLogin() {
     const payload = { email, password }; // Only email and password for login
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/organization/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export default function ParticipantLogin() {
         localStorage.setItem('token', data.token);
 
         // Redirect user after successful login
-        router.push("http://localhost:3000/organization"); // Change this to the route you want to redirect to
+        router.push("/organization"); // Change this to the route you want to redirect to
       } else {
         setMessage(data.error || "Login failed");
       }
