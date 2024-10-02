@@ -27,6 +27,15 @@ const orgSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     default: false // Default value is false
+  },
+  password: {
+    type: String,
+    required: true.valueOf,
+    select: false
+  },
+  role: {
+type: String,
+defualt: "organization"
   }
 }, {
   timestamps: true // Automatically adds `createdAt` and `updatedAt` fields
