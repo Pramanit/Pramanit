@@ -72,7 +72,7 @@ export default function ParticipantLogin() {
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden flex items-center justify-center">
       {/* Falcon Icon and Link to Home Page */}
-      <div className="absolute top-4 left-4 cursor-pointer" onClick={() => router.push("page.tsx")}>
+      <div className="absolute top-4 left-4 cursor-pointer" onClick={() => router.push("/#")}>
         <Image src="/logo.png" alt="Falcon Icon" width={50} height={50} />
       </div>
 
