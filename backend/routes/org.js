@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
 const { requiresAuth } = require('express-openid-connect');
 const dotenv = require('dotenv');
@@ -10,8 +12,9 @@ const DiamSdk = require("diamnet-sdk");
 const axios = require('axios');
 const Certificate = require("../models/certificate")
 const Participant = require("../models/participant")
-const encrypt = require("../utils.js/encrypt");
-const checkRole = require('../middleware/checkRole');
+const EmailVerification = require('../models/emailVerification');
+// const encrypt = require("../utils.js/encrypt");
+// const checkRole = require('../middleware/checkRole');
 
 const server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io/");
 
@@ -327,11 +330,66 @@ router.post("/event/:eventId/createCertificate", requiresAuth(), async (req, res
     });
     await newCertificate.save();
 
+
+    //email logic 
+       //send verification email (usePlunk)
+   const to = `${issuedToEmail}`;
+   const subject = `Congratulations for your new certificate!`;
+   const bodyContent = `
+   <div style="width: 600px; height: auto; border: 1px solid #000; padding: 20px; box-sizing: border-box; position: relative;">
+       <!-- Space for logo at the top -->
+       <div style="height: 60px; padding:10px 10px 10px 0px ">
+       <img src="https://pramanit.co/logo.jpg" alt="logo of Pramanit" style="border-radius: 15px; padding: 5px; width: 60px; height: auto;">
+       </div>
+               <!-- Horizontal line for separation -->
+           <hr style="border: 1px solid #ccc; margin: 20px 0;">
+       <div>
+           <div style="font-weight: bold; font-size: 1.6em; line-height: 1.2em; margin-botton: 10px">
+               <p style="margin: 0;">Heyy</p>
+               <p style="margin: 0;">(${email})</p>
+               <p style="margin: 0;">You have been awarded by certificate! Register and Login to our platform to view your certificates.</p>
+           </div>
+
+           <p>Please do not share with anybody</p>
+          <!-- Button -->
+            <a href="https://pramanit.co/" style="display: inline-block; padding: 10px 20px; margin-top: 20px; font-size: 16px; color: #fff; background-color: #007BFF; text-decoration: none; border-radius: 5px;">View your Certificate</a>
+
+       </div>
+   </div>
+   `;
+   const subscribed = true;
+   const name = 'Pramanit';
+   const headers = {};
+   
+   // Properly stringify the requestBody object
+   const requestBody = JSON.stringify({
+       to: to,
+       subject: subject,
+       body: bodyContent,
+       subscribed: subscribed,
+       name: name,
+       headers: headers,
+       metadata:{
+         accountType: "organization"
+       }
+   });
+   
+   const options = {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json',
+           Authorization: `Bearer ${process.env.USE_PLUNK_API_KEY}`
+       },
+       body: requestBody
+   };
+   
+   
+       const response = await fetch('https://api.useplunk.com/v1/send', options);
+       const data = await response.json();
+       console.log(data); 
+
     // Send the asset details in response
     res.status(200).json({ success: true, verificationId: verificationId });
-
-    //send email to participant
-
   } catch (e) {
     console.error("Error processing request:", e);
     res.status(500).json({error:true, msg: e.message});
@@ -360,39 +418,193 @@ router.get("/verify/:verificationId", async (req, res)=> {
 
 })
 
+router.get("/login", async (req, res)=> {
+  const { email, password } = req.body;
 
-router.get('/login', (req, res) => {
-  if (req.oidc.isAuthenticated()) {
-    // If the user is already authenticated, redirect them to the desired page
-    return res.redirect('/org');
+  try{
+    const organization = await Org.findOne({email});
+ 
+    if(!organization){
+      return res.status(404).json({message: "User not found"})
+    }
+    if(!organization.password){
+     return res.json({message:"please register first"})
+    }
+ 
+    if(organization.emailVerification === false){
+     res.status(400).json({message:"This email is not  verified yet"})
+    }
+    const isMatch = await bcrypt.compare(password, organization.password);
+    if(!isMatch){
+     return res.status(400).json({message:"INVALID INPUTS/INPUT"})
+    }
+ 
+    const token = jwt.sign({email: organization.email, role:"organization"}, process.env.JWT_SECRET, {expiresIn: "1h"});
+ 
+    res.status(200).json({token: token});
+   } catch (e) {
+     return res.status(500).json({error:true, message:"Server Error"});
+   }
+})
+
+router.post("/register", async (req,res)=> {
+  const { name, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const receivingKeys = DiamSdk.Keypair.random(); // Generate a new keypair
+  
+  const recievingSecret = receivingKeys.secret();
+  const recievingPublicKey = receivingKeys.publicKey();
+  try{
+    const newOrg = new Org({
+      name: name,
+      email: email,
+      publicKey: recievingPublicKey,
+      privateKey: recievingSecret,
+      password: hashedPassword,
+     })
+     await newOrg.save();
+
+     const newEmailVerification = new EmailVerification({
+      email: email,
+      role: "organization"
+     })
+
+     const savedEnrtyToEmailVerification = await newEmailVerification.save();
+
+     const verificationId = savedEnrtyToEmailVerification.otp;
+
+        //send verification email (usePlunk)
+   const to = `${email}`;
+   const subject = `Your OTP for PRAMANIT`;
+   const bodyContent = `
+   <div style="width: 600px; height: auto; border: 1px solid #000; padding: 20px; box-sizing: border-box; position: relative;">
+       <!-- Space for logo at the top -->
+       <div style="height: 60px; padding:10px 10px 10px 0px ">
+       <img src="https://pramanit.co/logo.jpg" alt="logo of Pramanit" style="border-radius: 15px; padding: 5px; width: 60px; height: auto;">
+       </div>
+               <!-- Horizontal line for separation -->
+           <hr style="border: 1px solid #ccc; margin: 20px 0;">
+       <div>
+           <div style="font-weight: bold; font-size: 1.6em; line-height: 1.2em; margin-botton: 10px">
+               <p style="margin: 0;">Heyy</p>
+               <p style="margin: 0;">(${email})</p>
+               <p style="margin: 0;">Your OTP is ${verificationId}</p>
+           </div>
+
+           <p>Please do not share with anybody</p>
+          
+       </div>
+   </div>
+   `;
+   const subscribed = true;
+   const name = 'Pramanit';
+   const headers = {};
+   
+   // Properly stringify the requestBody object
+   const requestBody = JSON.stringify({
+       to: to,
+       subject: subject,
+       body: bodyContent,
+       subscribed: subscribed,
+       name: name,
+       headers: headers,
+       metadata:{
+         accountType: "organization"
+       }
+   });
+   
+   const options = {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json',
+           Authorization: `Bearer ${process.env.USE_PLUNK_API_KEY}`
+       },
+       body: requestBody
+   };
+   
+   
+       const response = await fetch('https://api.useplunk.com/v1/send', options);
+       const data = await response.json();
+       console.log(data); 
+
+
+  //response
+  res.status(200).json({message:"An Email verification link has been sent to your inbox"});
+  } catch(err) {
+    console.log(err.message);
+    res.status(500).json({message:"Internal Server Error"})
   }
 
-  res.oidc.login({ 
-    authorizationParams: { 
-      prompt: 'login', 
-      connection: 'organizations', 
-      state: '/org' 
-    } 
-  });
-});
+})
 
-// Handle callback logic from Auth0
-router.get('/callback', (req, res) => {
-  if (req.oidc.isAuthenticated()) {
-    // If user is authenticated, redirect to the desired page
-    res.redirect(req.query.state || '/org');
-  } else {
-    res.status(401).json({ message: 'User not authenticated' });
-  }
-});
+router.post("/verifyEmail", async (req,res)=> {
+  const { email, otp } = req.body;
+  try{
+   const verificationParticipant = EmailVerification.findOne({email});
+ 
+   if (!verificationParticipant) {
+     return res.status(400).json({ error: true, message: "No verification record found" });
+   }
+ 
+   if(verificationParticipant.otp !== otp){
+     return res.status(400).json({error: true, message: "wrong otp"});
+   }
+   if(verificationParticipant.role !== "organization"){
+     return res.status(400).json({error: true, message: "unauthorized"});
+   }
+   
+     
+     await Participant.findOneAndUpdate({email: email, role:"organization"}, {emailVerification: true});
+     // const participant = new Participant.findOne({email: email});
+     // if(!participant){
+     //   return res.status(404).json({message: "User not found"})
+     // }
+     // if(!isMatch){
+     //  return res.status(400).json({message:"INVALID INPUTS/INPUT"})
+     // }
+  
+     // const token = jwt.sign({email: participant.email, role:"participant"}, process.env.JWT_SECRET, {expiresIn: "1h"});
+     return res.status(200).json({message:"email verified", success: true})
+ } catch(err) {
+   res.status(500).json({message:"Internal Server Error"})
+ }
+})
 
-router.get('/logout', (req, res) => {
-  res.oidc.logout({
-    returnTo: '/', // Redirect after logout
-    logoutParams: {
-      federated: true, // This logs the user out of Auth0 and any other identity providers
-    },
-  });
-});
+
 
 module.exports = router;
+
+//** legacy auth logic **//
+// router.get('/login', (req, res) => {
+//   if (req.oidc.isAuthenticated()) {
+//     // If the user is already authenticated, redirect them to the desired page
+//     return res.redirect('/org');
+//   }
+
+//   res.oidc.login({ 
+//     authorizationParams: { 
+//       prompt: 'login', 
+//       connection: 'organizations', 
+//       state: '/org' 
+//     } 
+//   });
+// });
+
+// // Handle callback logic from Auth0
+// router.get('/callback', (req, res) => {
+//   if (req.oidc.isAuthenticated()) {
+//     // If user is authenticated, redirect to the desired page
+//     res.redirect(req.query.state || '/org');
+//   } else {
+//     res.status(401).json({ message: 'User not authenticated' });
+//   }
+// });
+
+// router.get('/logout', (req, res) => {
+//   res.oidc.logout({
+//     returnTo: '/', // Redirect after logout
+//     logoutParams: {
+//       federated: true, // This logs the user out of Auth0 and any other identity providers
+//     },
+//   });
+// });

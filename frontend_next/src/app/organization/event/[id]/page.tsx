@@ -25,7 +25,7 @@ const eventsData: EventType[] = [
   },
   // Add more events as needed
 ];
-
+export const runtime = 'edge';
 export default function EventPage() {
   const { id } = useParams(); // Get the event ID from the URL
   const event = eventsData[Number(id) - 1]; // Fetch the event based on the ID
