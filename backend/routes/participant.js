@@ -85,7 +85,14 @@ try {
     password: hashedPassword,
    })
    await newParticipant.save();
-
+    // account funded
+    const response1 = await axios.get(
+      `https://friendbot.diamcircle.io?addr=${encodeURIComponent(receivingKeys.publicKey())}`
+    );
+    console.log("22")
+    const responseJSON = response1.data;
+    console.log("33")
+    console.log("SUCCESS! You have a new account :)\n", responseJSON);
    const newEmailVerification = new EmailVerification({
     email: email,
     role: "participant"

@@ -236,7 +236,8 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
   console.log(issuerDetails)
 
   const eventDetails = await Event.findOne({eventId});
-  const assetData = `${issuerDetails.name} ${issueToName} ${prize} ${eventDetails.eventName}`;
+  console.log(eventDetails)
+  const assetData = ` ${issueToName} ${prize} ${eventDetails.eventName}`;
   console.log(assetData);
 
 
@@ -453,6 +454,13 @@ router.post("/register", async (req,res)=> {
      const savedEnrtyToEmailVerification = await newEmailVerification.save();
 
      const verificationId = savedEnrtyToEmailVerification.otp;
+     const response1 = await axios.get(
+      `https://friendbot.diamcircle.io?addr=${encodeURIComponent(receivingKeys.publicKey())}`
+    );
+    console.log("22")
+    const responseJSON = response1.data;
+    console.log("33")
+    console.log("SUCCESS! You have a new account :)\n", responseJSON);
 
         //send verification email (usePlunk)
    const to = `${email}`;
