@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Pricing } from "@/components/Pricingdemo";
 
 
+
 export default function Home() {
   return (
     <>
