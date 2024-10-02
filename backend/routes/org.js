@@ -237,7 +237,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
 
   const eventDetails = await Event.findOne({eventId});
   console.log(eventDetails)
-  const assetData = ` ${issueToName} ${prize} ${eventDetails.eventName}`;
+  const assetData = `${issuerDetails.name} ${issueToName} ${prize} ${eventDetails.eventName}`;
   console.log(assetData);
 
 
