@@ -1,22 +1,24 @@
 "use client"; // Make this a Client Component
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 import Image from 'next/image';
 import profilePhoto from '@/assets/images/organization-3d.jpg'; // Import the profile image
 import logo from '@/assets/images/pramanit3.png'; // Import your logo image
 import blueTick from '@/assets/images/bluetick1.png'; // Import the blue tick image
-import Loader from '@/components/loader';
 
-// Define the Event type
 interface EventType {
-  event: string; // or whatever properties your event has
-  id: number;  // adjust as necessary
-  // Add more properties as needed
+  id: number;
+  eventName: string;
+  description: string;
+  dateTime: string;
 }
 
 export default function OrganizationsPage() {
-  const [isVerified] = useState(true); // Replace this with actual verification logic
+  const [isVerified, setIsVerified] = useState(false); // State for organization verification
   const [isFormOpen, setIsFormOpen] = useState(false); // State to handle form visibility
+  const [organization, setOrganization] = useState({ name: '', email: '', publicKey: '' });
+  const [events, setEvents] = useState<EventType[]>([]); // Define the type for the events array
   const router = useRouter();
 
   // Fetch organization and event details when the component mounts
@@ -48,9 +50,7 @@ export default function OrganizationsPage() {
   // Handle adding new events
   const handleAddEvent = async (event: Omit<EventType, 'id'>) => {
     const token = localStorage.getItem('token'); // Get the token from localStorage
-    if(!token){
-      router.push("/org/login")
-    }
+    
     try {
       // Send a POST request to the backend to save the new event
       const response = await axios.post(
@@ -84,7 +84,6 @@ export default function OrganizationsPage() {
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
-      
       {/* Navbar */}
       <div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
         <h1 className="text-lg font-semibold">Organization Dashboard</h1>
@@ -102,7 +101,7 @@ export default function OrganizationsPage() {
           <Image src={profilePhoto} alt="User Profile" className="w-32 h-32 rounded-full object-cover" width={128} height={128} />
           <div className="text-left">
             <h2 className="text-gray-300 text-sm">Organization Name</h2>
-            <span className="text-2xl font-semibold">ABC org.</span>
+            <span className="text-2xl font-semibold">{organization.name}</span>
             {isVerified && (
               <Image src={blueTick} alt="Verified Organization" className="inline-block w-9 h-9 ml-2 pb-1 pr-1" width={20} height={20} />
             )}
@@ -112,6 +111,7 @@ export default function OrganizationsPage() {
 
       {/* Centered Events Title */}
       <h2 className="text-3xl font-semibold mt-10 mb-6 text-center text-white">Events List</h2>
+      
       
       {/* Table Section */}
       <div className="overflow-x-auto px-4 mb-4">
@@ -124,11 +124,11 @@ export default function OrganizationsPage() {
             </tr>
           </thead>
           <tbody>
-            {events.map((event) => (
+            {events.map((event: any) => (
               <tr
                 key={event.id}
                 className="hover:bg-opacity-30 hover:bg-white/10 cursor-pointer"
-                onClick={() => router.push(`/organization/event/${event.eventId}`)} // Navigate to event detail page
+                onClick={() => router.push(`/organization/event/${event.id}`)} // Navigate to event detail page
               >
                 <td className="py-2 px-4 border-b text-white">{event.eventName}</td>
                 <td className="py-2 px-4 border-b text-white">{event.description}</td>
@@ -141,61 +141,59 @@ export default function OrganizationsPage() {
 
       {/* Create Event Button */}
       <div className="flex z-10 justify-center mt-6">
-        <div className=''>
-          <button
-            className="px-6 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700 transition-colors"
-            onClick={() => setIsFormOpen(true)}
-          >
-            Create Event
-          </button>
-        </div>
+        <button
+          className="px-6 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700 transition-colors"
+          onClick={() => setIsFormOpen(true)}
+        >
+          Create Event
+        </button>
       </div>
 
       {/* Popup Form */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-          <div className="bg-white bg-opacity-10 backdrop-blur-md p-8 rounded-lg shadow-lg w-96 relative">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Create New Event</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const newEvent = {
-                  eventName: formData.get("eventName"),
-                  description: formData.get("description"),
-                  dateTime: formData.get("dateTime"),
-                };
-                handleAddEvent(newEvent);
-              }}
-            >
-              <div className="mb-4">
-                <label className="block text-white text-sm mb-1">Event Name</label>
-                <input name="eventName" type="text" className="w-full p-2 rounded bg-gray-700 text-white" required />
-              </div>
-              <div className="mb-4">
-                <label className="block text-white text-sm mb-1">Description</label>
-                <textarea name="description" className="w-full p-2 rounded bg-gray-700 text-white" required />
-              </div>
-              <div className="mb-4">
-                <label className="block text-white text-sm mb-1">Date & Time</label>
-                <input name="dateTime" type="datetime-local" className="w-full p-2 rounded bg-gray-700 text-white" required />
-              </div>
-              <div className="flex justify-between">
-                <button type="submit" className="px-4 py-2 bg-green-600 rounded text-white hover:bg-green-700">
-                  Save
-                </button>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-red-600 rounded text-white hover:bg-red-700"
-                  onClick={() => setIsFormOpen(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+  <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+    <div className="bg-white bg-opacity-10 backdrop-blur-md p-8 rounded-lg shadow-lg w-96 relative">
+      <h2 className="text-2xl font-semibold mb-4 text-center">Create New Event</h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const newEvent = {
+            eventName: formData.get("eventName") as string || "",
+            description: formData.get("description") as string || "",
+            dateTime: formData.get("dateTime") as string || "",
+          };
+          handleAddEvent(newEvent); // Call the function to send the event to the backend
+        }}
+      >
+        <div className="mb-4">
+          <label className="block text-white text-sm mb-1">Event Name</label>
+          <input name="eventName" type="text" className="w-full p-2 rounded bg-gray-700 text-white" required />
         </div>
-      )}
+        <div className="mb-4">
+          <label className="block text-white text-sm mb-1">Description</label>
+          <textarea name="description" className="w-full p-2 rounded bg-gray-700 text-white" required />
+        </div>
+        <div className="mb-4">
+          <label className="block text-white text-sm mb-1">Date & Time</label>
+          <input name="dateTime" type="datetime-local" className="w-full p-2 rounded bg-gray-700 text-white" required />
+        </div>
+        <div className="flex justify-between">
+          <button type="submit" className="px-4 py-2 bg-green-600 rounded text-white hover:bg-green-700">
+            Save
+          </button>
+          <button
+            type="button"
+            className="px-4 py-2 bg-red-600 rounded text-white hover:bg-red-700"
+            onClick={() => setIsFormOpen(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 }
