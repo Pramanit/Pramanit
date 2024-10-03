@@ -36,10 +36,10 @@ export default function EventPage() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/event/${id}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're storing the JWT in localStorage
+            Authorization: `Bearer ${localStorage.getItem('tokenOrganization')}`, // Assuming you're storing the JWT in localStorage
           },
         });
-
+        
         if (!response.ok) {
           throw new Error('Failed to fetch event details');
         }
@@ -76,7 +76,7 @@ export default function EventPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Send the JWT token
+          Authorization: `Bearer ${localStorage.getItem('tokenOrganization')}`, // Send the JWT token
         },
         body: JSON.stringify(certificateData),
       });
@@ -100,7 +100,7 @@ export default function EventPage() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/event/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('tokenOrganization')}`,
         },
       });
 

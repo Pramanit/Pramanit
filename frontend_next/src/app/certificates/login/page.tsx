@@ -15,7 +15,7 @@ export default function ParticipantLogin() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('tokenParticipant');
     if (token) {
       router.push("/certificates"); // Redirect if token is present
     }
@@ -54,7 +54,7 @@ export default function ParticipantLogin() {
 
       if (response.ok) {
         console.log("Login successful");
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('tokenParticipant', data.token);
 
         // Redirect user after successful login
         router.push("/certificates"); // Change this to the route you want to redirect to
