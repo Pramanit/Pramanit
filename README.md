@@ -1,5 +1,7 @@
 ![Logo](https://github.com/Pramanit/Pramanit/blob/main/Utilities/Logos%20Final/pramanit%20full%20logo%20BLACK%20TEXT.png)
 # PRAMANIT
+**[pramanit.co](https://pramanit.co/)**
+
 **Certificate verification and management app**
 
 We are a tech-driven organization focused on revolutionizing the way certifications are issued and verified. Our platform leverages the power of blockchain technology, specifically the `Diamante Blockchain`, **to create a secure, decentralized, and tamper-proof system for generating and verifying certificates.** Whether it's educational credentials, professional certifications, or any type of legal document, we ensure that the integrity and authenticity of each certificate are maintained at the highest level.
@@ -53,7 +55,7 @@ For support, mail us on pramanit2024@gmail.com or
 - [MongoDb]()
 ## Contributing
 
-We welcome contributions from the community! To contribute to **Muzer**, follow these steps:
+We welcome contributions from the community! To contribute to **Pramanit**, follow these steps:
 
 1. Fork the repository.
 
