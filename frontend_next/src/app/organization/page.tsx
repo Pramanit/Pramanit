@@ -15,11 +15,17 @@ interface EventType {
 }
 
 export default function OrganizationsPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isVerified, setIsVerified] = useState(false); // State for organization verification
   const [isFormOpen, setIsFormOpen] = useState(false); // State to handle form visibility
   const [organization, setOrganization] = useState({ name: '', email: '', publicKey: '' });
   const [events, setEvents] = useState<EventType[]>([]); // Define the type for the events array
   const router = useRouter();
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    window.location.href = "/";
+    localStorage.removeItem('token');
+  };
 
   // Fetch organization and event details when the component mounts
   useEffect(() => {
@@ -94,6 +100,14 @@ export default function OrganizationsPage() {
           </a>
         </div>
       </div>
+
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="mt-0 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition absolute right-10"
+      >
+        Logout
+      </button>
 
       {/* Profile Card Section */}
       <div className="flex justify-center mb-8">

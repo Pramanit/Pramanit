@@ -5,6 +5,9 @@ import { useState } from "react";
 export default function OrganizationRegister() {
   const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false);
   const [otp, setOtp] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,6 +23,7 @@ export default function OrganizationRegister() {
   const handleRegister = async (e : any) => {
     e.preventDefault();
     setErrorMessage("");
+    setIsLoading(true); // Set loading to true when registration starts
     try {
       // Send a POST request to the backend API
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/register`, {
@@ -41,8 +45,11 @@ export default function OrganizationRegister() {
     } catch (err) {
       console.error("Error during registration:", err);
       setErrorMessage("An error occurred during registration.");
+    } finally {
+      setIsLoading(false); // Set loading back to false after the registration is complete
     }
-  };
+};
+
 
   const handleOtpSubmit = async (e: any) => {
     e.preventDefault();
@@ -116,10 +123,18 @@ export default function OrganizationRegister() {
           <button
             type="submit"
             className="w-full py-2 bg-blue-600 rounded text-white hover:bg-blue-700 transition-colors"
+            disabled={isLoading} // Disable button while loading
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
+
+        {/* Error message */}
+        {error && <p className="mt-4 text-center text-red-500">{error}</p>}
+
+        {/* Success message */}
+        {message && <p className="mt-4 text-center text-green-500">{message}</p>}
+
         <p className="mt-4 text-center text-gray-400">
           Already have an account?{" "}
           <a href="/organization/login" className="text-blue-400 hover:underline">
@@ -158,6 +173,13 @@ export default function OrganizationRegister() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Loading Spinner */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+          <div className="loader"></div>
         </div>
       )}
     </div>
