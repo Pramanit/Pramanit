@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Logo } from "@/components/Logo";
 
 export default function OrganizationRegister() {
   const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false);
@@ -15,6 +17,7 @@ export default function OrganizationRegister() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
 
   const handleChange = (e : any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -82,6 +85,8 @@ export default function OrganizationRegister() {
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden flex items-center justify-center">
+      {/* Position the Logo in the top-right corner */}
+      <Logo/>
       <div className="w-full max-w-md p-8 rounded-lg bg-white bg-opacity-10 backdrop-blur-md shadow-lg">
         <h2 className="text-3xl font-semibold mb-6 text-center text-white">Organization Register</h2>
         {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
@@ -109,16 +114,22 @@ export default function OrganizationRegister() {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label className="block text-sm mb-2 text-gray-300">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formData.password}
               onChange={handleChange}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
+            <div
+              className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-2xl"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
+            </div>
           </div>
           <button
             type="submit"

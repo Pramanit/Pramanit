@@ -104,7 +104,7 @@ export default function ParticipantRegister() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 rounded bg-white text-black"
+              className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
           </div>
@@ -114,7 +114,7 @@ export default function ParticipantRegister() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 rounded bg-white text-black"
+              className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
           </div>
@@ -124,14 +124,14 @@ export default function ParticipantRegister() {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 rounded bg-white text-black"
+              className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-2xl"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <FaEyeSlash className="text-black" /> : <FaEye className="text-black" />}
+              {showPassword ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
             </div>
           </div>
           <button
