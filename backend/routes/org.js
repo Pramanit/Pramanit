@@ -353,7 +353,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
                     <!-- Header with diagonal background -->
                     <tr>
                         <td style="background: linear-gradient(135deg, #4a90e2 0%, #5cb6e4 100%); padding: 40px 40px 60px 40px; text-align: center;">
-                            <img src=".\logoprmt.svg" alt="Pramanit Logo" style="width: 70%; height: auto; display: block; margin: 0 auto 20px;">
+                            <img src="https://pramanit.co/logo.jpg" alt="Pramanit Logo" style="width: 70%; height: auto; display: block; margin: 0 auto 20px;">
                             <h1 style="color: #ffffff; font-size: 28px; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Your Certificate</h1>
                         </td>
                     </tr>
@@ -364,7 +364,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
                             <p style="color: #555; font-size: 16px; margin-bottom: 20px;">You have been awarded a certificate! Register and login to our platform to view your certificates.</p>
                             <p style="color: #888; font-size: 14px; margin-bottom: 30px;">Please do not share with anybody.</p>
                             <!-- Button -->
-                            <a href="https://pramanit.co/certificate/register" style="display: inline-block; padding: 12px 20px; font-size: 16px; color: #fff; background-color: #5cb6e4; text-decoration: none; border-radius: 5px;">View your Certificate</a>
+                            <a href="https://pramanit.co/certificates/register" style="display: inline-block; padding: 12px 20px; font-size: 16px; color: #fff; background-color: #5cb6e4; text-decoration: none; border-radius: 5px;">View your Certificate</a>
                         </td>
                     </tr>
                     <!-- Footer -->
@@ -372,7 +372,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
                         <td style="background-color: #333; color: #ffffff; padding: 30px 40px; text-align: center;">
                             <p style="margin: 0 0 10px; font-size: 14px;">© 2024 Pramanit. All rights reserved.</p>
                             <p style="margin: 0; font-size: 14px;">
-                                <a href="https://pramanit.co" style="color: #5cb6e4; text-decoration: none;">Visit our website</a>
+                                <a href="https://pramanit.co/" style="color: #5cb6e4; text-decoration: none;">Visit our website</a>
                             </p>
                         </td>
                     </tr>
@@ -497,7 +497,7 @@ router.post("/register", async (req,res)=> {
                     <!-- Header with diagonal background -->
                     <tr>
                         <td style="background: linear-gradient(135deg, #4a90e2 0%, #5cb6e4 100%); padding: 40px 40px 60px 40px; text-align: center;">
-                            <img src=".\logoprmt.svg" alt="Pramanit Logo" style="width: 70%; height: auto; display: block; margin: 0 auto 20px;">
+                            <img src="https://pramanit.co/logo.jpg" alt="Pramanit Logo" style="width: 70%; height: auto; display: block; margin: 0 auto 20px;">
                             <h1 style="color: #ffffff; font-size: 28px; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Your OTP Code</h1>
                         </td>
                     </tr>
