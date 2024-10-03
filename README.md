@@ -1,5 +1,7 @@
 ![Logo](https://github.com/Pramanit/Pramanit/blob/main/Utilities/Logos%20Final/pramanit%20full%20logo%20BLACK%20TEXT.png)
 # PRAMANIT
+**[pramanit.co](https://pramanit.co/)**
+
 **Certificate verification and management app**
 
 We are a tech-driven organization focused on revolutionizing the way certifications are issued and verified. Our platform leverages the power of blockchain technology, specifically the `Diamante Blockchain`, **to create a secure, decentralized, and tamper-proof system for generating and verifying certificates.** Whether it's educational credentials, professional certifications, or any type of legal document, we ensure that the integrity and authenticity of each certificate are maintained at the highest level.
@@ -25,7 +27,7 @@ Our solution is aimed at eliminating the challenges of counterfeit certificates,
 ## Screenshots
 
 ![App Screenshot](https://github.com/umeshs25/Pramanit/blob/main/Utilities/Screenshots/Pramanit_HeroPage_S1.png)
-## Usage/Examples
+<!-- ## Usage/Examples
 
 ```javascript
 import Component from 'my-project'
@@ -33,7 +35,7 @@ import Component from 'my-project'
 function App() {
   return <Component />
 }
-```
+``` -->
 ## Feedback
 
 If you have any feedback, please reach out to us at pramanit2024@gmail.com
@@ -48,12 +50,12 @@ For support, mail us on pramanit2024@gmail.com or
 - [Akash Dewangan](https://github.com/akashdewgn)
 ## Acknowledgements
 
-- [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
-- [Awesome README](https://github.com/matiassingers/awesome-readme)
-- [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+- [Diamante Blockchain](https://www.diamante.io/)
+- [Diamante SDK Documentaion](https://developers.diamante.io/#/)
+- [MongoDb]()
 ## Contributing
 
-We welcome contributions from the community! To contribute to **Muzer**, follow these steps:
+We welcome contributions from the community! To contribute to **Pramanit**, follow these steps:
 
 1. Fork the repository.
 
