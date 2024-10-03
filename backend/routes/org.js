@@ -346,7 +346,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
 
 
     //email logic 
-       //send verification email (usePlunk)
+       //send congratulations email (usePlunk)
    const to = `${issuedToEmail}`;
    const subject = `Congratulations for your new certificate!`;
    const bodyContent = `
@@ -365,7 +365,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
                     <tr>
                         <td style="padding: 40px 40px 20px;">
                             <h1 style="color: #333; font-size: 22px; font-weight: bold; margin-bottom: 20px;">Heyy,</h1>
-                            <p style="color: #555; font-size: 16px; margin-bottom: 10px;">(${email})</p>
+                            <p style="color: #555; font-size: 16px; margin-bottom: 10px;">(${issuedToEmail})</p>
                             <p style="color: #555; font-size: 16px; margin-bottom: 20px;">You have been awarded a certificate! Register and login to our platform to view your certificates.</p>
                             <p style="color: #888; font-size: 14px; margin-bottom: 30px;">Please do not share with anybody.</p>
                             <!-- Button -->

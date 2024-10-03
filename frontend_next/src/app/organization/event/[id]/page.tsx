@@ -192,61 +192,62 @@ export default function EventPage() {
         </div>
       </div>
 
-      {/* Generate Certificate Form Popup */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <form onSubmit={handleGenerateCertificate} className="bg-white rounded-lg p-8 w-96 shadow-lg transition-transform transform duration-300 ease-in-out scale-100 hover:scale-105">
-            <h3 className="text-2xl font-bold mb-6 text-center text-blue-600">Generate Certificate</h3>
-            
-            <div className="mb-4">
-              <label htmlFor="participantName" className="block text-sm font-medium text-gray-700 mb-2">Participant Name</label>
-              <input
-                type="text"
-                name="participantName"
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+{/* Generate Certificate Form Popup */}
+{isFormOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+    <form onSubmit={handleGenerateCertificate} className="bg-gray-800 rounded-lg p-8 w-96 shadow-lg transition-transform transform duration-300 ease-in-out scale-100 hover:scale-105">
+      <h3 className="text-2xl font-bold mb-6 text-center text-blue-400">Generate Certificate</h3>
+      
+      <div className="mb-4">
+        <label htmlFor="participantName" className="block text-sm font-medium text-gray-200 mb-2">Participant Name</label>
+        <input
+          type="text"
+          name="participantName"
+          required
+          className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+      <div className="mb-4">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">Email</label>
+        <input
+          type="email"
+          name="email"
+          required
+          className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-            <div className="mb-4">
-              <label htmlFor="prizePosition" className="block text-sm font-medium text-gray-700 mb-2">Prize/Position</label>
-              <input
-                type="text"
-                name="prizePosition"
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+      <div className="mb-4">
+        <label htmlFor="prizePosition" className="block text-sm font-medium text-gray-200 mb-2">Prize/Position</label>
+        <input
+          type="text"
+          name="prizePosition"
+          required
+          className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-            <div className="flex justify-center gap-4">
-              <button
-                type="submit"
-                disabled={generating}
-                className="w-full px-4 py-2 bg-blue-600 rounded text-white hover:bg-blue-700"
-              >
-                {generating ? 'Generating...' : 'Generate'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsFormOpen(false)}
-                className="w-full px-4 py-2 bg-gray-500 rounded text-white hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+      <div className="flex justify-center gap-4">
+        <button
+          type="submit"
+          disabled={generating}
+          className="w-full px-4 py-2 bg-blue-600 rounded text-white hover:bg-blue-700"
+        >
+          {generating ? 'Generating...' : 'Generate'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsFormOpen(false)}
+          className="w-full px-4 py-2 bg-gray-600 rounded text-white hover:bg-gray-700"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+)}
+
     </div>
   );
 }
