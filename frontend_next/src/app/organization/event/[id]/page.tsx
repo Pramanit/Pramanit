@@ -17,7 +17,7 @@ interface CertificateType {
   issuedToEmail: string;
   prize: string;
   date: string;
-  issuedToEmailId: string;
+  verificationId: string;
 }
 
 export const runtime = 'edge';
@@ -169,7 +169,7 @@ export default function EventPage() {
                     <th className="px-4 py-2 text-left text-gray-300">Issued To Email</th>
                     <th className="px-4 py-2 text-left text-gray-300">Prize</th>
                     <th className="px-4 py-2 text-left text-gray-300">Date</th>
-                    {/* <th className="px-4 py-2 text-left text-gray-300">Email ID</th> */}
+                    <th className="px-4 py-2 text-left text-gray-300">Verification Id</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
@@ -178,7 +178,7 @@ export default function EventPage() {
                       <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.issuedToEmail}</td>
                       <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.prize}</td>
                       <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{new Date(cert.date).toLocaleString()}</td>
-                      {/* <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.issuedToEmailId}</td> */}
+                      <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.verificationId}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -202,7 +202,7 @@ export default function EventPage() {
           type="text"
           name="participantName"
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           placeholder="Enter participant's name"
         />
       </div>
@@ -213,7 +213,7 @@ export default function EventPage() {
           type="email"
           name="email"
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           placeholder="Enter participant's email"
         />
       </div>
@@ -224,7 +224,7 @@ export default function EventPage() {
           type="text"
           name="prizePosition"
           required
-          className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          className="w-full px-4 py-2 text-black border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           placeholder="Enter prize position"
         />
       </div>
