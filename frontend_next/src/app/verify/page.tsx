@@ -32,7 +32,7 @@ export default function CertificateVerification() {
     setCertificateDetails(null); // Clear certificate details before new verification
 
     try {
-      const response = await fetch(`http://localhost:3000/verify/${inputId.trim()}`); // Fetching certificate by input ID
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify/${inputId.trim()}`); // Fetching certificate by input ID
 
       if (!response.ok) {
         throw new Error("Failed to verify certificate"); // Throw error if the response is not OK
