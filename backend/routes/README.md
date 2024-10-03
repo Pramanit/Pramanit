@@ -6,7 +6,7 @@
                     <!-- Header with diagonal background -->
                     <tr>
                         <td style="background: linear-gradient(135deg, #4a90e2 0%, #5cb6e4 100%); padding: 40px 40px 60px 40px; text-align: center;">
-                            <img src="https://pramanit.co/logo.jpg" alt="Pramanit Logo" style="width: 70%; height: auto; display: block; margin: 0 auto 20px;">
+                            <img src="https://pramanit.co/pramanitBanner.jpg" alt="Pramanit Logo" style="width: 70%; height: auto; display: block; margin: 0 auto 20px;">
                             <h1 style="color: #ffffff; font-size: 28px; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Your OTP Code</h1>
                         </td>
                     </tr>
