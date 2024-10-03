@@ -24,13 +24,16 @@ export default function OrganizationsPage() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     window.location.href = "/";
-    localStorage.removeItem('token');
+    localStorage.removeItem('tokenOrganization');
   };
 
   // Fetch organization and event details when the component mounts
   useEffect(() => {
     const fetchOrganizationDetails = async () => {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('tokenOrganization')
+      if (!token) {
+        router.push("/organization/login"); // Redirect if token is present
+      }
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/org`, {
           headers: {
@@ -55,7 +58,7 @@ export default function OrganizationsPage() {
 
   // Handle adding new events
   const handleAddEvent = async (event: Omit<EventType, 'id'>) => {
-    const token = localStorage.getItem('token'); // Get the token from localStorage
+    const token = localStorage.getItem('tokenOrganization'); // Get the token from localStorage
     
     try {
       // Send a POST request to the backend to save the new event

@@ -16,7 +16,7 @@ export default function ParticipantLogin() {
 
   // Check for token and redirect if user is already logged in
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('tokenOrganization');
     if (token) {
       router.push("/organization"); // Redirect if token is present
     }
@@ -43,6 +43,7 @@ export default function ParticipantLogin() {
     setLoading(true); // Start loading state
     const payload = { email, password }; // Only email and password for login
 
+    console.log(payload)
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/login`, {
         method: 'POST',
@@ -58,7 +59,7 @@ export default function ParticipantLogin() {
         console.log("Login successful");
 
         // Store the token in localStorage if login is successful
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('tokenOrganization', data.token);
 
         // Redirect user after successful login
         router.push("/organization"); // Change this to the route you want to redirect to
