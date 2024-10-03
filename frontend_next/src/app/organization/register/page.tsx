@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Logo } from "@/components/Logo";
 
 export default function OrganizationRegister() {
   const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false);
@@ -84,6 +85,8 @@ export default function OrganizationRegister() {
 
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden flex items-center justify-center">
+      {/* Position the Logo in the top-right corner */}
+      <Logo/>
       <div className="w-full max-w-md p-8 rounded-lg bg-white bg-opacity-10 backdrop-blur-md shadow-lg">
         <h2 className="text-3xl font-semibold mb-6 text-center text-white">Organization Register</h2>
         {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
