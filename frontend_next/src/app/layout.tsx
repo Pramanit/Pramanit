@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     icon: '/favicon.ico', // Path to your favicon
   },
   openGraph: {
-    title: 'Pramanit',
-    description: 'Certificate Verification System',
+    title: 'Pramanit | Blockchain-Powered Certificate Verification',
+    description: 'Secure, transparent, and efficient certificate management and verification system using cutting-edge blockchain technology.',
     url: 'https://pramanit.co',
     siteName: 'Pramanit',
     images: [
