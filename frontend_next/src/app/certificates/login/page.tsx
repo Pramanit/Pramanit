@@ -61,7 +61,7 @@ export default function ParticipantLogin() {
       } else {
         setMessage(data.error || "Login failed");
       }
-    } catch (error: any) {
+    } catch (error: any) {  
       console.error('Error:', error); // Log the entire error
       setMessage('An error occurred while logging in');
     } finally {
@@ -85,7 +85,7 @@ export default function ParticipantLogin() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`w-full p-2 rounded bg-white-700 text-black ${!isEmailValid ? 'border-red-500' : ''}`}
+              className={`w-full p-2 rounded bg-gray-700 text-white ${!isEmailValid ? 'border-red-500' : ''}`}
               required
             />
             {!isEmailValid && <p className="text-red-500 text-sm">Invalid email address</p>}
@@ -96,14 +96,14 @@ export default function ParticipantLogin() {
               type={isPasswordVisible ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 rounded bg-white-100  text-black"
+              className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-2xl"
               onClick={() => setIsPasswordVisible(!isPasswordVisible)}
             >
-              {isPasswordVisible ? <FaEyeSlash className="text-black" /> : <FaEye className="text-black" />}
+              {isPasswordVisible ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
             </div>
           </div>
           <button

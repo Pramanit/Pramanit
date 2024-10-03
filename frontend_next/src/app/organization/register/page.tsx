@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function OrganizationRegister() {
   const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function OrganizationRegister() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
 
   const handleChange = (e : any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -109,16 +111,22 @@ export default function OrganizationRegister() {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label className="block text-sm mb-2 text-gray-300">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formData.password}
               onChange={handleChange}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             />
+            <div
+              className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-2xl"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
+            </div>
           </div>
           <button
             type="submit"
