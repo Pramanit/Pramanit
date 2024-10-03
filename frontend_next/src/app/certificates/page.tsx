@@ -27,15 +27,15 @@ export default function CertificatesPage() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     window.location.href = "/";
-    localStorage.removeItem('token');
+    localStorage.removeItem('tokenParticipant');
   };
 
   useEffect(() => {
     const fetchCertificates = async () => {
-      const token = localStorage.getItem('token'); // Assuming the auth token is stored in localStorage
+      const token = localStorage.getItem('tokenParticipant'); // Assuming the auth token is stored in localStorage
 
       if (!token) {
-        router.push("/org/login");
+        router.push("/certificates/login");
         return;
       }
 
