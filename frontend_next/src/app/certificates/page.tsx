@@ -78,26 +78,30 @@ export default function CertificatesPage() {
       <div className="absolute h-[375px] w-[750px] sm:w-[1536px] sm:h-[768px] lg:w-[2400px] llg:h-[800px] rounded-[100%] bg-black left-1/2 -translate-x-1/2 border border-[#5A88B0] bg-[radial-gradient(closest-side,#000_82%,#1C3B6B)] top-[calc(100%-96px)] sm:top-[calc(100%-120px)]"></div>
 
       {/* Navbar */}
-      <div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
-        <h1 className="text-lg font-semibold">Your Dashboard</h1>
-        <div>
-          <Image
-            src={logo}
-            alt="Logo"
-            className="w-12 h-12"
-            width={48}
-            height={48}
-          />
-        </div>
-      </div>
+<div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
+  <h1 className="text-lg font-semibold">Your Dashboard</h1>
+  
+  {/* Logo and Logout Button Container */}
+  <div className="flex items-center space-x-4">
+    {/* Logo */}
+    <Image
+      src={logo}
+      alt="Logo"
+      className="w-12 h-12"
+      width={48}
+      height={48}
+    />
+  
+    {/* Logout Button */}
+    <button
+      onClick={handleLogout}
+      className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition"
+    >
+      Logout
+    </button>
+  </div>
+</div>
 
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="mt-0 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition absolute right-10"
-      >
-        Logout
-      </button>
 
       {/* Profile Card Section */}
       <div className="flex justify-center mb-8">
