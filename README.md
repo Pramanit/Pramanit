@@ -25,7 +25,7 @@ Our solution is aimed at eliminating the challenges of counterfeit certificates,
 ## Screenshots
 
 ![App Screenshot](https://github.com/umeshs25/Pramanit/blob/main/Utilities/Screenshots/Pramanit_HeroPage_S1.png)
-## Usage/Examples
+<!-- ## Usage/Examples
 
 ```javascript
 import Component from 'my-project'
@@ -33,7 +33,7 @@ import Component from 'my-project'
 function App() {
   return <Component />
 }
-```
+``` -->
 ## Feedback
 
 If you have any feedback, please reach out to us at pramanit2024@gmail.com
@@ -48,9 +48,9 @@ For support, mail us on pramanit2024@gmail.com or
 - [Akash Dewangan](https://github.com/akashdewgn)
 ## Acknowledgements
 
-- [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
-- [Awesome README](https://github.com/matiassingers/awesome-readme)
-- [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+- [Diamante Blockchain](https://www.diamante.io/)
+- [Diamante SDK Documentaion](https://developers.diamante.io/#/)
+- [MongoDb]()
 ## Contributing
 
 We welcome contributions from the community! To contribute to **Muzer**, follow these steps:
