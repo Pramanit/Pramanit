@@ -115,7 +115,7 @@ try {
     <div style="width: 600px; height: auto; border: 1px solid #000; padding: 20px; box-sizing: border-box; position: relative;">
         <!-- Space for logo at the top -->
         <div style="height: 60px; padding:10px 10px 10px 0px ">
-        <img src="https://pramanit.co/logo.jpg" alt="logo of Pramanit" style="border-radius: 15px; padding: 5px; width: 60px; height: auto;">
+        <img src="https://pramanit.co/pramanitBanner.png" alt="logo of Pramanit" style="border-radius: 15px; padding: 5px; width: 60px; height: auto;">
         </div>
                 <!-- Horizontal line for separation -->
             <hr style="border: 1px solid #ccc; margin: 20px 0;">
