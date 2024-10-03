@@ -30,7 +30,7 @@ app.use(cors({
   credentials: true
 }));
 
-// app.use(cors());
+app.use(cors());
 // Use Auth0 middleware with authRequired set to false
 app.use(auth({
   ...auth0Config,
