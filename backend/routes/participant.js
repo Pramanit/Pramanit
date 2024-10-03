@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { requiresAuth } = require('express-openid-connect');
 const Certificate = require('../models/certificate'); // Your certificate model
 const DiamSdk = require("diamnet-sdk");
 const Participant = require('../models/participant');

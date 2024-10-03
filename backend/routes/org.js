@@ -4,7 +4,6 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
-const { requiresAuth } = require('express-openid-connect');
 const dotenv = require('dotenv');
 const Org = require("../models/org");
 const Event = require("../models/event");

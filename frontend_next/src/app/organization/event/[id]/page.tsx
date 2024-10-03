@@ -5,13 +5,16 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import logo from '@/assets/images/pramanit3.png'; // Import the logo image
 import { IoArrowBackOutline } from 'react-icons/io5'; // Import a back icon
+import { IoCopy } from 'react-icons/io5'; // Import copy icon
 
+// Define the EventType interface for event data
 interface EventType {
   eventName: string;
   description: string;
   dateTime: string;
 }
 
+// Define the CertificateType interface for certificate data
 interface CertificateType {
   issuedToEmail: string;
   prize: string;
@@ -19,18 +22,22 @@ interface CertificateType {
   verificationId: string;
 }
 
+// Set the runtime environment to 'edge'
 export const runtime = 'edge';
 
 export default function EventPage() {
   const router = useRouter(); // Initialize useRouter
   const { id } = useParams(); // Get the event ID from the URL
-  const [event, setEvent] = useState<EventType | null>(null);
-  const [certificates, setCertificates] = useState<CertificateType[]>([]);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [event, setEvent] = useState<EventType | null>(null); // Store event data
+  const [certificates, setCertificates] = useState<CertificateType[]>([]); // Store certificates data
+  const [isFormOpen, setIsFormOpen] = useState(false); // Toggle certificate form popup
+  const [loading, setLoading] = useState(true); // Handle loading state
+  const [generating, setGenerating] = useState(false); // Handle generating state for the certificate
+  const [error, setError] = useState<string | null>(null); // Handle error state
 
+  const [copiedId, setCopiedId] = useState<string | null>(null); // Track the ID that was copied
+
+  // Fetch event details and certificates when the page loads
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -58,6 +65,7 @@ export default function EventPage() {
     fetchEvent();
   }, [id]);
 
+  // Handle certificate generation
   const handleGenerateCertificate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -88,7 +96,7 @@ export default function EventPage() {
       const data = await response.json();
       console.log('Certificate generated successfully:', data);
       setIsFormOpen(false);
-      fetchCertificates();
+      fetchCertificates(); // Refresh the list of certificates
     } catch (error) {
       console.error('Error generating certificate:', error);
     } finally {
@@ -96,6 +104,7 @@ export default function EventPage() {
     }
   };
 
+  // Fetch updated list of certificates after generating a new one
   const fetchCertificates = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/org/event/${id}`, {
@@ -115,14 +124,25 @@ export default function EventPage() {
     }
   };
 
+  // Handle copy of the verification ID
+  const handleCopyId = (id: string) => {
+    navigator.clipboard.writeText(id).then(() => {
+      setCopiedId(id); // Set the copied ID to show the message
+      setTimeout(() => setCopiedId(null), 2000); // Remove the message after 2 seconds
+    });
+  };
+
+  // Loading state UI
   if (loading) {
     return <div className="text-center text-white">Loading...</div>;
   }
 
+  // Error state UI
   if (error) {
     return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
+  // Main Event Page UI
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
       {/* Navbar */}
@@ -177,77 +197,95 @@ export default function EventPage() {
                 <tbody className="divide-y divide-gray-700">
                   {certificates.map((cert, index) => (
                     <tr key={index}>
-                      <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.issuedToEmail}</td>
-                      <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.prize}</td>
-                      <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{new Date(cert.date).toLocaleString()}</td>
-                      <td className="px-4 py-2 text-white overflow-hidden text-ellipsis whitespace-nowrap">{cert.verificationId}</td>
+                      <td className="px-4 py-2 text-gray-300">{cert.issuedToEmail}</td>
+                      <td className="px-4 py-2 text-gray-300">{cert.prize}</td>
+                      <td className="px-4 py-2 text-gray-300">{cert.date}</td>
+                      <td className="px-4 py-2 text-gray-300">
+                        <div className="relative">
+                          {/* Copy Button for Verification Id */}
+                          <button 
+                            className="absolute top-0 left-0 flex items-center text-gray-300 hover:text-blue-500"
+                            onClick={() => handleCopyId(cert.verificationId)}
+                          >
+                            <IoCopy className="mr-1" /> 
+                          </button>
+                          {/* Verification ID Display */}
+                          <span
+                            className="pl-8 cursor-pointer"
+                            onClick={() => handleCopyId(cert.verificationId)} // Copy on click
+                          >
+                            {cert.verificationId}
+                          </span>
+                          {/* Message to indicate copy success */}
+                          {copiedId === cert.verificationId && (
+                            <span className="text-green-500 text-sm ml-2">Verification ID copied!</span>
+                          )}
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ) : (
-            <p className="text-center text-gray-400">No certificates issued yet.</p>
+            <p className="text-center text-gray-300">No certificates issued yet.</p>
           )}
         </div>
       </div>
 
-{/* Generate Certificate Form Popup */}
-{isFormOpen && (
-  <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-    <form onSubmit={handleGenerateCertificate} className="bg-gray-800 rounded-lg p-8 w-96 shadow-lg transition-transform transform duration-300 ease-in-out scale-100 hover:scale-105">
-      <h3 className="text-2xl font-bold mb-6 text-center text-blue-400">Generate Certificate</h3>
-      
-      <div className="mb-4">
-        <label htmlFor="participantName" className="block text-sm font-medium text-gray-200 mb-2">Participant Name</label>
-        <input
-          type="text"
-          name="participantName"
-          required
-          className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">Email</label>
-        <input
-          type="email"
-          name="email"
-          required
-          className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="prizePosition" className="block text-sm font-medium text-gray-200 mb-2">Prize/Position</label>
-        <input
-          type="text"
-          name="prizePosition"
-          required
-          className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div className="flex justify-center gap-4">
-        <button
-          type="submit"
-          disabled={generating}
-          className="w-full px-4 py-2 bg-blue-600 rounded text-white hover:bg-blue-700"
-        >
-          {generating ? 'Generating...' : 'Generate'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsFormOpen(false)}
-          className="w-full px-4 py-2 bg-gray-600 rounded text-white hover:bg-gray-700"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
-)}
-
+      {/* Certificate Generation Form */}
+      {isFormOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-96">
+            <h3 className="text-xl font-semibold mb-4">Generate Certificate</h3>
+            <form onSubmit={handleGenerateCertificate}>
+              <div className="mb-4">
+                <label className="block text-gray-700">Participant Name</label>
+                <input
+                  type="text"
+                  name="participantName"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Prize Position</label>
+                <input
+                  type="text"
+                  name="prizePosition"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                  onClick={() => setIsFormOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  disabled={generating}
+                >
+                  {generating ? 'Generating...' : 'Generate'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
