@@ -372,7 +372,7 @@ router.post("/event/:eventId/createCertificate",verifyToken, checkRole(("organiz
                         <td style="background-color: #333; color: #ffffff; padding: 30px 40px; text-align: center;">
                             <p style="margin: 0 0 10px; font-size: 14px;">© 2024 Pramanit. All rights reserved.</p>
                             <p style="margin: 0; font-size: 14px;">
-                                <a href="https://pramanit.co" style="color: #5cb6e4; text-decoration: none;">Visit our website</a>
+                                <a href="https://pramanit.co/" style="color: #5cb6e4; text-decoration: none;">Visit our website</a>
                             </p>
                         </td>
                     </tr>
