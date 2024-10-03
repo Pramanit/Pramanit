@@ -20,6 +20,7 @@ router.get("/:verificationId", async (req, res)=> {
   
   
     console.log("Asset details retrieved:", transactionDetails);
+    console.log("1")
     res.status(200).json({success:true, cert:transactionDetails.memo});
   } catch (e) {
     console.log(e)
