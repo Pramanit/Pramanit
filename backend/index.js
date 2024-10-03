@@ -1,8 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const { auth } = require('express-openid-connect');
-const auth0Config = require('./auth0Config');
 //db connection import
 const connectToDatabase = require('./db');
 
@@ -31,11 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 // }));
 
 app.use(cors());
-// Use Auth0 middleware with authRequired set to false
-app.use(auth({
-  ...auth0Config,
-  authRequired: false,
-}));
 
 // Allow unauthenticated access to /verify route
 app.use('/verify', verifyRouter); // This route will be accessible without authentication
