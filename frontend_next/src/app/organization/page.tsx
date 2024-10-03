@@ -38,7 +38,7 @@ export default function OrganizationsPage() {
           }
         });
         const { org, events } = response.data;
-        console.log(response.data)
+        // console.log(response.data)
         
       
         // Update state with organization and event details
@@ -73,11 +73,11 @@ export default function OrganizationsPage() {
           },
         }
       );
-      console.log({
-        eventName: event.eventName,
-        description: event.description,
-        dateTime: event.dateTime,
-      })
+      // console.log({
+      //   eventName: event.eventName,
+      //   description: event.description,
+      //   dateTime: event.dateTime,
+      // })
       // Add the new event to the state only if the POST request is successful
       const newEvent = response.data.savedEvent; // Assuming the backend returns the saved event with an id
       setEvents([...events, newEvent]); // Update the state with the new event
@@ -91,23 +91,26 @@ export default function OrganizationsPage() {
   return (
     <div className="min-h-screen bg-black text-white bg-[linear-gradient(to_bottom,#000,#0A1A33_34%,#113366_65%,#335B99_82%)] py-4 sm:py-8 relative overflow-hidden">
       {/* Navbar */}
-      <div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
-        <h1 className="text-lg font-semibold">Organization Dashboard</h1>
-        <div>
-          {/* Redirect to home page when logo is clicked */}
-          <a href="/">
-            <Image src={logo} alt="Logo" className="w-12 h-12" width={48} height={48} />
-          </a>
-        </div>
-      </div>
+<div className="flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md py-2 px-4 mb-6 mx-4 rounded-lg shadow-lg">
+  <h1 className="text-lg font-semibold">Organization Dashboard</h1>
+  
+  {/* Logo and Logout Button Container */}
+  <div className="flex items-center space-x-4">
+    {/* Redirect to home page when logo is clicked */}
+    <a href="/">
+      <Image src={logo} alt="Logo" className="w-12 h-12" width={48} height={48} />
+    </a>
 
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="mt-0 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition absolute right-10"
-      >
-        Logout
-      </button>
+    {/* Logout Button */}
+    <button
+      onClick={handleLogout}
+      className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none transition"
+    >
+      Logout
+    </button>
+  </div>
+</div>
+
 
       {/* Profile Card Section */}
       <div className="flex justify-center mb-8">
