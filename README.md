@@ -47,7 +47,7 @@ For support, mail us on pramanit2024@gmail.com or
 - [Gitesh Sarvaiya](https://github.com/giteshsarvaiya)
 - [Umesh Sahu](https://github.com/umeshs25)
 - [Rajeev Dewangan](https://github.com/rajeevDewangan)
-- [Akash Dewangan](https://github.com/akashdewgn)
+- [Akash Dewangan](https://github.com/akaswang)
 ## Acknowledgements
 
 - [Diamante Blockchain](https://www.diamante.io/)
